@@ -1,0 +1,18 @@
+{
+    "config": {
+        "freq": "1h",
+        "fee": 0.0003
+    },
+    "params": {
+        "SOL": {
+            "both": {
+                "0": {
+                    "window_entry_k": 98.0,
+                    "window_entry_d": 96.0,
+                    "window_exit_k": 96.0,
+                    "window_exit_d": 124.0
+                }
+            }
+        }
+    }
+}

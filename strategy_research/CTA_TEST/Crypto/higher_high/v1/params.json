@@ -1,0 +1,30 @@
+{
+    "config": {
+        "freq": "1h",
+        "fee": 0.0003
+    },
+    "params": {
+        "SOL": {
+            "long": {
+                "0": {
+                    "short_window_l": 24.0,
+                    "middle_window_l": 56.0,
+                    "long_window_l": 128.0,
+                    "short_window_s": 0.0,
+                    "middle_window_s": 40.0,
+                    "long_window_s": 88.0
+                }
+            },
+            "short": {
+                "0": {
+                    "short_window_l": 16.0,
+                    "middle_window_l": 48.0,
+                    "long_window_l": 120.0,
+                    "short_window_s": 24.0,
+                    "middle_window_s": 56.0,
+                    "long_window_s": 128.0
+                }
+            }
+        }
+    }
+}
