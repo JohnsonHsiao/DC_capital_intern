@@ -57,10 +57,11 @@ class Strategy(BackTester):
         window_s_k = int(params['window_s_k'])
         window_s_d = int(params['window_s_d'])
         upper_bound = int(params['upper_bound'])
+        rv_rolling = int(params['rv_rolling'])
 
         df['log_rtn_sq'] = np.square(np.log(df['close']/df['close'].shift(1)))
-        df['RV'] = np.sqrt(df['log_rtn_sq'].rolling(120).sum())
-        df['RV_pctrank'] = df['RV'].rolling(120).rank(pct=True)*100
+        df['RV'] = np.sqrt(df['log_rtn_sq'].rolling(rv_rolling).sum())
+        df['RV_pctrank'] = df['RV'].rolling(rv_rolling).rank(pct=True)*100
         # rv_pct_MA = df['RV_pctrank'].rolling(72).mean()*100
         RV_filter = (df['RV_pctrank'] > 100-upper_bound) & (df['RV_pctrank'] < upper_bound)
 
