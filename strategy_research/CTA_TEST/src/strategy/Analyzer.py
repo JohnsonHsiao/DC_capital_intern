@@ -69,7 +69,7 @@ class Analyzer():
         else:
             plt.title(f'Return & MDD ({mdd}) - {tag}', fontsize=16)
         if txt!='':
-            plt.text(0.9, 0.2, txt, verticalalignment='bottom', horizontalalignment='left', transform=ax.transAxes)
+            plt.text(0.85, 0.2, txt, verticalalignment='bottom', horizontalalignment='left', transform=ax.transAxes)
 
         plt.show();
 
@@ -141,7 +141,7 @@ class Analyzer():
         print(f'PF * Win Rate: {wrpf:.3f}')
         value_series = (pf.value/start_value)*100
         value_series = value_series - 100
-        self.plot_return_mdd(value_series.ffill(), tag=tag, axv_index=axv_index)
+        self.plot_return_mdd(value_series.ffill(), tag=tag, axv_index=axv_index, txt=f'APY: {apy:.2f} %\nMDD: {mdd:.2f} %\nSharpe Ratio: {sharpe:.2f}\nWin Rate: {win_rate:.2f} %\nPF: {profit_f:.2f}')
 
     # trades analysis, df
     def plot_signal_response(self,trades):

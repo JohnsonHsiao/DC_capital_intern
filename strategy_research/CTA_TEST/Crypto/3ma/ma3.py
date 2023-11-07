@@ -24,8 +24,11 @@ import json
 # config = json.load(config_f)# %%
 
 def get_data(coin):
-    pair = f'{coin}USDT'
-    df = pd.read_hdf(f'/Volumes/crypto_data/price_data/binance/1m/{pair}_PERPETUAL.h5')
+    try:
+        pair = f'{coin}USDT'
+        df = pd.read_hdf(f'/Volumes/crypto_data/price_data/binance/1m/{pair}_PERPETUAL.h5')
+    except:
+        df = pd.read_hdf(f'/Users/johnsonhsiao/{pair}_PERPETUAL.h5')
     return df
 
 class Strategy(BackTester):
@@ -49,30 +52,39 @@ class Strategy(BackTester):
     def _strategy(self, df, side='both', **params):
         
         # params
-        window_l = int(params['window_l'])
-        window_s = int(params['window_s'])
+        short_window_l = int(params['short_window_l'])
+        middle_window_l = int(params['middle_window_l'])
+        long_window_l = int(params['long_window_l'])
+        short_window_s = int(params['short_window_s'])
+        middle_window_s = int(params['middle_window_s'])
+        long_window_s = int(params['long_window_s'])
+        upper_bound = int(params['upper_bound'])
 
-        # df['log_rtn_sq'] = np.square(np.log(df['close']/df['close'].shift(1)))
-        # df['RV'] = np.sqrt(df['log_rtn_sq'].rolling(window_l).sum())
-        # df['RV_pctrank'] = df['RV'].rolling(window_l).rank(pct=True)   
-        # rv_pct_EMA = df['RV_pctrank'].ewm(span=window_l, adjust=False).mean()
-        # RV_filter = rv_pct_EMA > 20 and rv_pct_EMA < 80
-
-        df['lema_1'] = df['close'].ewm(span=window_l, adjust=False).mean()
-        df['lema_2'] = df['lema_1'].ewm(span=window_l, adjust=False).mean()
-        df['lema_3'] = df['lema_2'].ewm(span=window_l, adjust=False).mean()
-        df['tema_l'] = 3 * df['lema_1'] - 3 * df['lema_2'] + df['lema_3']
+        df['log_rtn_sq'] = np.square(np.log(df['close']/df['close'].shift(1)))
+        df['RV'] = np.sqrt(df['log_rtn_sq'].rolling(120).sum())
+        df['RV_pctrank'] = df['RV'].rolling(120).rank(pct=True)   
+        rv_pct_MA = df['RV_pctrank'].rolling(75).mean()*100
+        RV_filter = (rv_pct_MA > 100-upper_bound) & (rv_pct_MA < upper_bound)
         
-        long_entry = (df['close'].shift(1) < df['tema_l'].shift(1)) & (df['close'] > df['tema_l'])
-        long_exit = (df['close'].shift(1) > df['tema_l'].shift(1)) & (df['close'] < df['tema_l']) 
+        df['short_ma'] = df['close'].rolling(window=short_window_l).mean()
+        df['middle_ma'] = df['close'].rolling(window=middle_window_l).mean()
+        df['long_ma'] = df['close'].rolling(window=long_window_l).mean()
+        
+        # 多單
+        long_entry = (df['short_ma'].shift(1) < df['middle_ma'].shift(1)) & \
+                    (df['short_ma'] > df['middle_ma']) & (df['long_ma'] > df['long_ma'].shift(1)) & RV_filter
+        long_exit = ((df['short_ma'].shift(1) > df['middle_ma'].shift(1)) & (df['short_ma'] < df['middle_ma'])) | \
+                    ((df['middle_ma'].shift(1) > df['long_ma'].shift(1)) & (df['middle_ma'] < df['long_ma']))
 
-        df['sema_1'] = df['close'].ewm(span=window_s, adjust=False).mean()
-        df['sema_2'] = df['sema_1'].ewm(span=window_s, adjust=False).mean()
-        df['sema_3'] = df['sema_2'].ewm(span=window_s, adjust=False).mean()
-        df['tema_s'] = 3 * df['sema_1'] - 3 * df['sema_2'] + df['sema_3']
+        df['short_ma'] = df['close'].rolling(window=short_window_s).mean()
+        df['middle_ma'] = df['close'].rolling(window=middle_window_s).mean()
+        df['long_ma'] = df['close'].rolling(window=long_window_s).mean()
 
-        short_entry = (df['close'].shift(1) > df['tema_s'].shift(1)) & (df['close'] < df['tema_s'])
-        short_exit = (df['close'].shift(1) < df['tema_l'].shift(1)) & (df['close'] > df['tema_l'])
+        # 空單
+        short_entry = (df['short_ma'].shift(1) > df['middle_ma'].shift(1)) & \
+                    (df['short_ma'] < df['middle_ma']) & (df['long_ma'] < df['long_ma'].shift(1)) & RV_filter
+        short_exit = ((df['short_ma'].shift(1) < df['middle_ma'].shift(1)) & (df['short_ma'] > df['middle_ma'])) | \
+                    ((df['middle_ma'].shift(1) < df['long_ma'].shift(1)) & (df['middle_ma'] > df['long_ma']))
 
         if side == 'long':
             short_entry = False
@@ -91,7 +103,7 @@ class Strategy(BackTester):
                                         exits=long_exit,
                                         short_entries=short_entry,
                                         short_exits=short_exit,
-                                        # sl_stop= 0.05,
+                                        sl_stop= np.nan/100,
                                         upon_opposite_entry='reverse'
                                         )
         return pf, params

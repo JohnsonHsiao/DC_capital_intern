@@ -98,7 +98,7 @@ class MultiTester():
                             side=side,
                             params=self.params,
                             opt_type='processes',
-                            target = 'Calmar Ratio',
+                            target = 'Sharpe Ratio',
                             direction='max',
                             end=sep
                             )

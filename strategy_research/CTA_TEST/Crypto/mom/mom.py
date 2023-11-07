@@ -24,8 +24,11 @@ import json
 # config = json.load(config_f)# %%
 
 def get_data(coin):
-    pair = f'{coin}USDT'
-    df = pd.read_hdf(f'/Volumes/crypto_data/price_data/binance/1m/{pair}_PERPETUAL.h5')
+    try:
+        pair = f'{coin}USDT'
+        df = pd.read_hdf(f'/Volumes/crypto_data/price_data/binance/1m/{pair}_PERPETUAL.h5')
+    except:
+        df = pd.read_hdf(f'/Users/johnsonhsiao/{pair}_PERPETUAL.h5')
     return df
 
 class Strategy(BackTester):
@@ -58,7 +61,7 @@ class Strategy(BackTester):
         df['log_rtn_sq'] = np.square(np.log(df['close']/df['close'].shift(1)))
         df['RV'] = np.sqrt(df['log_rtn_sq'].rolling(120).sum())
         df['RV_pctrank'] = df['RV'].rolling(120).rank(pct=True)   
-        rv_pct_MA = df['RV_pctrank'].rolling(75).mean()*100
+        rv_pct_MA = df['RV_pctrank'].rolling(72).mean()*100
         RV_filter = (rv_pct_MA > 100-upper_bound) & (rv_pct_MA < upper_bound)
 
         df.ta.stoch(high='high', low='low', close='close', k=window_l_k, d=window_l_d, append=True)
