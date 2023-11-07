@@ -60,9 +60,9 @@ class Strategy(BackTester):
 
         df['log_rtn_sq'] = np.square(np.log(df['close']/df['close'].shift(1)))
         df['RV'] = np.sqrt(df['log_rtn_sq'].rolling(120).sum())
-        df['RV_pctrank'] = df['RV'].rolling(120).rank(pct=True)   
-        rv_pct_MA = df['RV_pctrank'].rolling(72).mean()*100
-        RV_filter = (rv_pct_MA > 100-upper_bound) & (rv_pct_MA < upper_bound)
+        df['RV_pctrank'] = df['RV'].rolling(120).rank(pct=True)*100
+        # rv_pct_MA = df['RV_pctrank'].rolling(72).mean()*100
+        RV_filter = (df['RV_pctrank'] > 100-upper_bound) & (df['RV_pctrank'] < upper_bound)
 
         df.ta.stoch(high='high', low='low', close='close', k=window_l_k, d=window_l_d, append=True)
         df.ta.stoch(high='high', low='low', close='close', k=window_s_k, d=window_s_d, append=True)

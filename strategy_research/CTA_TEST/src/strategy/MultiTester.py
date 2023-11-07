@@ -93,12 +93,17 @@ class MultiTester():
             trades = pd.concat([long_trades,short_trades]).sort_values('Entry Index')
             period_df = analyze.show_period_analysis(trades,period='Q')
             print(tabulate(period_df, headers='keys', tablefmt='psql')) # type: ignore
+            freq = self.config['freq']
+            if not os.path.exists(f"{symbol}-{freq}"):
+                os.makedirs(f"{symbol}")
+            long_record_df.to_csv(f'{symbol}-{freq}/short_record_df.csv')
+            short_record_df.to_csv(f'{symbol}-{freq}/short_record_df.csv')
         else:
             record_df = strategy.optimize(
                             side=side,
                             params=self.params,
                             opt_type='processes',
-                            target = 'Sharpe Ratio',
+                            target = 'Calmar Ratio',
                             direction='max',
                             end=sep
                             )
@@ -110,6 +115,10 @@ class MultiTester():
             analyze.show_pf_analysis(record_df['params'].iloc[0], side, symbol, axv_index=[_sep])
             period_df = analyze.show_period_analysis(trades,period='Q')
             print(tabulate(period_df, headers='keys', tablefmt='psql'))
+            freq = self.config['freq']
+            if not os.path.exists(f"{symbol}-{freq}"):
+                os.makedirs(f"{symbol}-{freq}")
+            record_df.to_csv(f"{symbol}-{freq}/record_df.csv")
 
     def run_rolling_test(self,symbol,side='L/S',intervals=[16,4],expanding=True):
         self.rolling_cache[symbol] = {}
@@ -244,6 +253,7 @@ class MultiTester():
         origin_end = self.end
         orgin_opt_cache = self.optimize_cache
         self.symbol_list = symbol_list
+
         for sample,pid in zip(sample_sets,range(len(sample_sets))):
             self.optimize_cache = {}
             all_params[pid] = {}
