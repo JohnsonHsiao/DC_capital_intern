@@ -71,7 +71,7 @@ class Analyzer():
         if txt!='':
             plt.text(0.85, 0.2, txt, verticalalignment='bottom', horizontalalignment='left', transform=ax.transAxes)
 
-        plt.show();
+        plt.show()
 
     # value analysis
     def show_value_analyze(self, value, tags='',axv_index=[]):
@@ -97,7 +97,7 @@ class Analyzer():
         pf = self.strategy.strategy(side = side,params=params)
         years = (self.df.index[-1] - self.df.index[0]).days/365
         stat = pf.stats()
-        print(stat)
+        # print(stat)
         start_value = stat['Start Value']
         _trades = pf.trades.records_readable
         _trades['holding period'] = _trades['Exit Index'] - _trades['Entry Index']
@@ -141,7 +141,8 @@ class Analyzer():
         print(f'PF * Win Rate: {wrpf:.3f}')
         value_series = (pf.value/start_value)*100
         value_series = value_series - 100
-        self.plot_return_mdd(value_series.ffill(), tag=tag, axv_index=axv_index, txt=f'APY: {apy:.2f} %\nMDD: {mdd:.2f} %\nSharpe Ratio: {sharpe:.2f}\nWin Rate: {win_rate:.2f} %\nPF: {profit_f:.2f}')
+        MDD = self.plot_return_mdd(value_series.ffill(), tag=tag, axv_index=axv_index, txt=f'APY: {apy:.2f} %\nMDD: {mdd:.2f} %\nSharpe Ratio: {sharpe:.2f}\nWin Rate: {win_rate:.2f} %\nPF: {profit_f:.2f}')
+        return MDD, stat
 
     # trades analysis, df
     def plot_signal_response(self,trades):
@@ -346,3 +347,15 @@ class Analyzer():
                     ]
         cols = params_list+metrics
         hip.Experiment.from_dataframe(record_df[cols]).display();
+
+    def outsamole_result_gen(self, params={}, side='both', tag='', axv_index=[]):
+        pf = self.strategy.strategy(side = side,params=params)
+        years = (self.df.index[-1] - self.df.index[0]).days/365
+        stat = pf.stats()
+        start_value = stat['Start Value']
+        value_series = (pf.value/start_value)*100
+        value_series = value_series - 100
+        total_return = value_series.ffill()
+        MDD_series = total_return.cummax()-total_return
+        MDD = round(max(MDD_series), 2)
+        return MDD, stat

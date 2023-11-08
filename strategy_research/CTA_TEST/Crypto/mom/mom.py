@@ -28,7 +28,8 @@ def get_data(coin):
         pair = f'{coin}USDT'
         df = pd.read_hdf(f'/Volumes/crypto_data/price_data/binance/1m/{pair}_PERPETUAL.h5')
     except:
-        df = pd.read_hdf(f'Y:\\price_data\\binance\\1m\\{pair}_PERPETUAL.h5')
+        df = pd.read_hdf(f'/Users/johnsonhsiao/{pair}_PERPETUAL.h5')
+        # df = pd.read_hdf(f'Y:\\price_data\\binance\\1m\\{pair}_PERPETUAL.h5')
     return df
 
 class Strategy(BackTester):
@@ -75,7 +76,7 @@ class Strategy(BackTester):
 
         long_entry = (df[f'STOCHd_{window_l_k}_{window_l_d}_3'] > df['double_l_dd']) & \
                     (df[f'STOCHd_{window_l_k}_{window_l_d}_3'].shift(1) < df['double_l_dd'].shift(1)) #& RV_filter
-        long_exit = (df[f'STOCHd_{window_s_k}_{window_s_d}_3'] < df['double_s_d']) #| ~RV_filter
+        long_exit = (df[f'STOCHd_{window_s_k}_{window_s_d}_3'] < df['double_l_d']) #| ~RV_filter
 
         short_entry = (df[f'STOCHd_{window_s_k}_{window_s_d}_3'] < df['double_s_dd']) & \
                     (df[f'STOCHd_{window_s_k}_{window_s_d}_3'].shift(1) > df['double_s_dd'].shift(1)) #& RV_filter
