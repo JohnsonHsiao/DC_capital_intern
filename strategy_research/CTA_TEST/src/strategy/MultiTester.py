@@ -94,10 +94,10 @@ class MultiTester():
             period_df = analyze.show_period_analysis(trades,period='Q')
             print(tabulate(period_df, headers='keys', tablefmt='psql')) # type: ignore
             freq = self.config['freq']
-            if not os.path.exists(f"{symbol}-{freq}"):
-                os.makedirs(f"{symbol}")
-            long_record_df.to_csv(f'{symbol}-{freq}/long_record_df.csv')
-            short_record_df.to_csv(f'{symbol}-{freq}/short_record_df.csv')
+            if not os.path.exists(f"opt/{symbol}-{freq}"):
+                os.makedirs(f"opt/{symbol}-{freq}")
+            long_record_df.to_csv(f'opt/{symbol}-{freq}/long_record_df.csv')
+            short_record_df.to_csv(f'opt/{symbol}-{freq}/short_record_df.csv')
         else:
             record_df = strategy.optimize(
                             side=side,
@@ -116,9 +116,9 @@ class MultiTester():
             period_df = analyze.show_period_analysis(trades,period='Q')
             print(tabulate(period_df, headers='keys', tablefmt='psql'))
             freq = self.config['freq']
-            if not os.path.exists(f"{symbol}-{freq}"):
-                os.makedirs(f"{symbol}-{freq}")
-            record_df.to_csv(f"{symbol}-{freq}/{side}_record_df.csv")
+            if not os.path.exists(f"opt/{symbol}-{freq}"):
+                os.makedirs(f"opt/{symbol}-{freq}")
+            record_df.to_csv(f"opt/{symbol}-{freq}/{side}_record_df.csv")
 
     def run_rolling_test(self,symbol,side='L/S',intervals=[16,4],expanding=True):
         self.rolling_cache[symbol] = {}
