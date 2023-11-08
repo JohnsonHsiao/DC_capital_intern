@@ -26,11 +26,11 @@ import json
 def get_data(coin):
     try:
         pair = f'{coin}USDT'
-        df = pd.read_hdf(f'Y:\\price_data\\binance\\1m\\{pair}_PERPETUAL.h5')
-        # df = pd.read_hdf(f'/Volumes/crypto_data/price_data/binance/1m/{pair}_PERPETUAL.h5')
+        # df = pd.read_hdf(f'Y:\\price_data\\binance\\1m\\{pair}_PERPETUAL.h5')
+        df = pd.read_hdf(f'/Volumes/crypto_data/price_data/binance/1m/{pair}_PERPETUAL.h5')
     except:
-        # df = pd.read_hdf(f'/Users/johnsonhsiao/{pair}_PERPETUAL.h5')
-        df = pd.read_hdf(f'C:\\Users\\Intern\\Desktop\\{pair}_PERPETUAL.h5')
+        df = pd.read_hdf(f'/Users/johnsonhsiao/{pair}_PERPETUAL.h5')
+        # df = pd.read_hdf(f'C:\\Users\\Intern\\Desktop\\{pair}_PERPETUAL.h5')
     return df
 
 class Strategy(BackTester):
