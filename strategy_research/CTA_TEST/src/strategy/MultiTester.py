@@ -118,7 +118,7 @@ class MultiTester():
             freq = self.config['freq']
             if not os.path.exists(f"{symbol}-{freq}"):
                 os.makedirs(f"{symbol}-{freq}")
-            record_df.to_csv(f"{symbol}-{freq}/{side}record_df.csv")
+            record_df.to_csv(f"{symbol}-{freq}/{side}_record_df.csv")
 
     def run_rolling_test(self,symbol,side='L/S',intervals=[16,4],expanding=True):
         self.rolling_cache[symbol] = {}
