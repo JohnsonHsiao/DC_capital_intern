@@ -28,7 +28,7 @@ def get_data(coin):
         pair = f'{coin}USDT'
         df = pd.read_hdf(f'/Volumes/crypto_data/price_data/binance/1m/{pair}_PERPETUAL.h5')
     except:
-        df = pd.read_hdf(f'/Users/johnsonhsiao/{pair}_PERPETUAL.h5')
+        df = pd.read_hdf(f'Y:\\price_data\\binance\\1m\\{pair}_PERPETUAL.h5')
     return df
 
 class Strategy(BackTester):
@@ -58,13 +58,13 @@ class Strategy(BackTester):
         short_window_s = int(params['short_window_s'])
         middle_window_s = int(params['middle_window_s'])
         long_window_s = int(params['long_window_s'])
-        upper_bound = int(params['upper_bound'])
+        # upper_bound = int(params['upper_bound'])
 
-        df['log_rtn_sq'] = np.square(np.log(df['close']/df['close'].shift(1)))
-        df['RV'] = np.sqrt(df['log_rtn_sq'].rolling(120).sum())
-        df['RV_pctrank'] = df['RV'].rolling(120).rank(pct=True)   
-        rv_pct_MA = df['RV_pctrank'].rolling(75).mean()*100
-        RV_filter = (rv_pct_MA > 100-upper_bound) & (rv_pct_MA < upper_bound)
+        # df['log_rtn_sq'] = np.square(np.log(df['close']/df['close'].shift(1)))
+        # df['RV'] = np.sqrt(df['log_rtn_sq'].rolling(120).sum())
+        # df['RV_pctrank'] = df['RV'].rolling(120).rank(pct=True)   
+        # rv_pct_MA = df['RV_pctrank'].rolling(75).mean()*100
+        # RV_filter = (rv_pct_MA > 100-upper_bound) & (rv_pct_MA < upper_bound)
         
         df['short_ma'] = df['close'].rolling(window=short_window_l).mean()
         df['middle_ma'] = df['close'].rolling(window=middle_window_l).mean()
@@ -72,7 +72,7 @@ class Strategy(BackTester):
         
         # 多單
         long_entry = (df['short_ma'].shift(1) < df['middle_ma'].shift(1)) & \
-                    (df['short_ma'] > df['middle_ma']) & (df['long_ma'] > df['long_ma'].shift(1)) & RV_filter
+                    (df['short_ma'] > df['middle_ma']) & (df['long_ma'] > df['long_ma'].shift(1)) #& RV_filter
         long_exit = ((df['short_ma'].shift(1) > df['middle_ma'].shift(1)) & (df['short_ma'] < df['middle_ma'])) | \
                     ((df['middle_ma'].shift(1) > df['long_ma'].shift(1)) & (df['middle_ma'] < df['long_ma']))
 
@@ -82,7 +82,7 @@ class Strategy(BackTester):
 
         # 空單
         short_entry = (df['short_ma'].shift(1) > df['middle_ma'].shift(1)) & \
-                    (df['short_ma'] < df['middle_ma']) & (df['long_ma'] < df['long_ma'].shift(1)) & RV_filter
+                    (df['short_ma'] < df['middle_ma']) & (df['long_ma'] < df['long_ma'].shift(1)) #& RV_filter
         short_exit = ((df['short_ma'].shift(1) < df['middle_ma'].shift(1)) & (df['short_ma'] > df['middle_ma'])) | \
                     ((df['middle_ma'].shift(1) < df['long_ma'].shift(1)) & (df['middle_ma'] > df['long_ma']))
 

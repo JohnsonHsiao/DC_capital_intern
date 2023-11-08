@@ -28,7 +28,7 @@ def get_data(coin):
         pair = f'{coin}USDT'
         df = pd.read_hdf(f'/Volumes/crypto_data/price_data/binance/1m/{pair}_PERPETUAL.h5')
     except:
-        df = pd.read_hdf(f'/Users/johnsonhsiao/{pair}_PERPETUAL.h5')
+        df = pd.read_hdf(f'Y:\\price_data\\binance\\1m\\{pair}_PERPETUAL.h5')
     return df
 
 class Strategy(BackTester):
@@ -56,14 +56,14 @@ class Strategy(BackTester):
         window_l_d = int(params['window_l_d'])
         window_s_k = int(params['window_s_k'])
         window_s_d = int(params['window_s_d'])
-        upper_bound = int(params['upper_bound'])
-        rv_rolling = int(params['rv_rolling'])
+        # upper_bound = int(params['upper_bound'])
+        # rv_rolling = int(params['rv_rolling'])
 
-        df['log_rtn_sq'] = np.square(np.log(df['close']/df['close'].shift(1)))
-        df['RV'] = np.sqrt(df['log_rtn_sq'].rolling(rv_rolling).sum())
-        df['RV_pctrank'] = df['RV'].rolling(rv_rolling).rank(pct=True)*100
+        # df['log_rtn_sq'] = np.square(np.log(df['close']/df['close'].shift(1)))
+        # df['RV'] = np.sqrt(df['log_rtn_sq'].rolling(rv_rolling).sum())
+        # df['RV_pctrank'] = df['RV'].rolling(rv_rolling).rank(pct=True)*100
         # rv_pct_MA = df['RV_pctrank'].rolling(72).mean()*100
-        RV_filter = (df['RV_pctrank'] > 100-upper_bound) & (df['RV_pctrank'] < upper_bound)
+        # RV_filter = (df['RV_pctrank'] > 100-upper_bound) & (df['RV_pctrank'] < upper_bound)
 
         df.ta.stoch(high='high', low='low', close='close', k=window_l_k, d=window_l_d, append=True)
         df.ta.stoch(high='high', low='low', close='close', k=window_s_k, d=window_s_d, append=True)
@@ -74,12 +74,12 @@ class Strategy(BackTester):
         df['double_s_dd'] = df['double_s_d'].ewm(span=window_s_d, adjust=False).mean()
 
         long_entry = (df[f'STOCHd_{window_l_k}_{window_l_d}_3'] > df['double_l_dd']) & \
-                    (df[f'STOCHd_{window_l_k}_{window_l_d}_3'].shift(1) < df['double_l_dd'].shift(1)) & RV_filter
-        long_exit = (df[f'STOCHd_{window_s_k}_{window_s_d}_3'] < df['double_s_d']) | ~RV_filter
+                    (df[f'STOCHd_{window_l_k}_{window_l_d}_3'].shift(1) < df['double_l_dd'].shift(1)) #& RV_filter
+        long_exit = (df[f'STOCHd_{window_s_k}_{window_s_d}_3'] < df['double_s_d']) #| ~RV_filter
 
         short_entry = (df[f'STOCHd_{window_s_k}_{window_s_d}_3'] < df['double_s_dd']) & \
-                    (df[f'STOCHd_{window_s_k}_{window_s_d}_3'].shift(1) > df['double_s_dd'].shift(1)) & RV_filter
-        short_exit = (df[f'STOCHd_{window_s_k}_{window_s_d}_3'] > df['double_s_d']) | ~RV_filter
+                    (df[f'STOCHd_{window_s_k}_{window_s_d}_3'].shift(1) > df['double_s_dd'].shift(1)) #& RV_filter
+        short_exit = (df[f'STOCHd_{window_s_k}_{window_s_d}_3'] > df['double_s_d']) #| ~RV_filter
         if side == 'long':
             short_entry = False
             short_exit = False
