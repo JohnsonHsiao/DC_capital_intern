@@ -135,13 +135,15 @@ class Analyzer():
         print(f'Expectancy : {exp:.2f} %')
         print(f'Total Time Exposure : {time_exposure:.2f} %')
         print('Total Trades:', stat['Total Trades'])
+        total_trades = stat['Total Trades']
         print(f'Win Rate: {win_rate:.2f} %')
         print('--------------------------------------------')
         wrpf = win_rate*profit_f/100
         print(f'PF * Win Rate: {wrpf:.3f}')
         value_series = (pf.value/start_value)*100
         value_series = value_series - 100
-        MDD = self.plot_return_mdd(value_series.ffill(), tag=tag, axv_index=axv_index, txt=f'APY: {apy:.2f} %\nMDD: {mdd:.2f} %\nSharpe Ratio: {sharpe:.2f}\nWin Rate: {win_rate:.2f} %\nPF: {profit_f:.2f}')
+        MDD = self.plot_return_mdd(value_series.ffill(), tag=tag, axv_index=axv_index, \
+                                   txt=f'APY: {apy:.2f} %\nMDD: {mdd:.2f} %\nSharpe Ratio: {sharpe:.2f}\nWin Rate: {win_rate:.2f} %\nTotal Trades: {total_trades:.2f}\nPF: {profit_f:.2f}')
         return MDD, stat
 
     # trades analysis, df
