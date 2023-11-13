@@ -18,10 +18,8 @@ from src.strategy.Analyzer import Analyzer
 # from src.strategy.PositionSizer import PositionSizer
 from src.strategy.MultiTester import MultiTester
 from src.utils import plot_return_mdd,twinx_plot # as utils
+import pytz
 
-import json
-# config_f = open('..\configs\config.json')
-# config = json.load(config_f)# %%
 
 def get_data(coin):
     try:
@@ -52,17 +50,23 @@ class Strategy(BackTester):
         return df.dropna()
     
     def _strategy(self, df, side='both', **params):
-        
+        df['timestamp'] = pd.to_datetime(df.index)
+
+        eastern = pytz.timezone('America/New_York')
+        df['timestamp_est'] = df['timestamp'].dt.tz_localize('UTC').dt.tz_convert(eastern)
+        df['is_weekday'] = df['timestamp_est'].dt.dayofweek < 5  # 0-4代表周一到周五
+
         # params
         window_l_k = int(params['window_l_k'])
         window_l_d = int(params['window_l_d'])
         window_s_k = int(params['window_s_k'])
         window_s_d = int(params['window_s_d'])
         # upper_bound = int(params['upper_bound'])
+        # rv_sum = int(params['rv_sum'])
         # rv_rolling = int(params['rv_rolling'])
 
         # df['log_rtn_sq'] = np.square(np.log(df['close']/df['close'].shift(1)))
-        # df['RV'] = np.sqrt(df['log_rtn_sq'].rolling(rv_rolling).sum())
+        # df['RV'] = np.sqrt(df['log_rtn_sq'].rolling(rv_sum).sum())
         # df['RV_pctrank'] = df['RV'].rolling(rv_rolling).rank(pct=True)*100
         # rv_pct_MA = df['RV_pctrank'].rolling(72).mean()*100
         # RV_filter = (df['RV_pctrank'] > 100-upper_bound) & (df['RV_pctrank'] < upper_bound)
@@ -77,11 +81,12 @@ class Strategy(BackTester):
 
         long_entry = (df[f'STOCHd_{window_l_k}_{window_l_d}_3'] > df['double_l_dd']) & \
                     (df[f'STOCHd_{window_l_k}_{window_l_d}_3'].shift(1) < df['double_l_dd'].shift(1)) #& RV_filter
-        long_exit = (df[f'STOCHd_{window_l_k}_{window_l_d}_3'] < df['double_l_d']) #| ~RV_filter
+        long_exit = (df[f'STOCHd_{window_l_k}_{window_l_d}_3'] < df['double_l_d'])
 
         short_entry = (df[f'STOCHd_{window_s_k}_{window_s_d}_3'] < df['double_s_dd']) & \
-                    (df[f'STOCHd_{window_s_k}_{window_s_d}_3'].shift(1) > df['double_s_dd'].shift(1)) #& RV_filter
+                    (df[f'STOCHd_{window_s_k}_{window_s_d}_3'].shift(1) > df['double_s_dd'].shift(1)) & df['is_weekday'] #& RV_filter
         short_exit = (df[f'STOCHd_{window_s_k}_{window_s_d}_3'] > df['double_s_d']) #| ~RV_filter
+        
         if side == 'long':
             short_entry = False
             short_exit = False

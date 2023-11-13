@@ -28,7 +28,7 @@ def get_data(coin):
         pair = f'{coin}USDT'
         df = pd.read_hdf(f'/Volumes/crypto_data/price_data/binance/1m/{pair}_PERPETUAL.h5')
     except:
-        df = pd.read_hdf(f'Y:\\price_data\\binance\\1m\\{pair}_PERPETUAL.h5')
+        df = pd.read_hdf(f'/Users/johnsonhsiao/{pair}_PERPETUAL.h5')
     return df
 
 class Strategy(BackTester):
@@ -53,11 +53,11 @@ class Strategy(BackTester):
         
         # params
         short_window_l = int(params['short_window_l'])
-        middle_window_l = int(params['middle_window_l'])
-        long_window_l = int(params['long_window_l'])
+        middle_window_l = int(params['middle_window_l']) + short_window_l
+        long_window_l = int(params['long_window_l']) + middle_window_l
         short_window_s = int(params['short_window_s'])
-        middle_window_s = int(params['middle_window_s'])
-        long_window_s = int(params['long_window_s'])
+        middle_window_s = int(params['middle_window_s']) + short_window_s
+        long_window_s = int(params['long_window_s']) + middle_window_s
         # upper_bound = int(params['upper_bound'])
 
         # df['log_rtn_sq'] = np.square(np.log(df['close']/df['close'].shift(1)))

@@ -348,7 +348,7 @@ class Analyzer():
         cols = params_list+metrics
         hip.Experiment.from_dataframe(record_df[cols]).display();
 
-    def outsamole_result_gen(self, params={}, side='both', tag='', axv_index=[]):
+    def outsample_result_gen(self, params={}, side='both', tag='', axv_index=[]):
         pf = self.strategy.strategy(side = side,params=params)
         years = (self.df.index[-1] - self.df.index[0]).days/365
         stat = pf.stats()
