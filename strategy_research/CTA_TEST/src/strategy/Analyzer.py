@@ -202,6 +202,7 @@ class Analyzer():
         q1 = ret_distribution.quantile(0.25)
         q3 = ret_distribution.quantile(0.75)
         mean = ret_distribution.mean()
+        median = ret_distribution.median()
         plt.title('Transaction PnL Distribution')
         sns.histplot(ret_distribution, bins=100) # type: ignore
         plt.axvline(x=q1, color='teal', ls='--',
@@ -210,6 +211,8 @@ class Analyzer():
                     label="Q3 = {:.2f}%".format(q3))
         plt.axvline(x=mean, color='red', ls='--',
                     label="Mean = {:.2f}%".format(mean))
+        plt.axvline(x=median, color='black', ls='--',
+                    label="Median = {:.2f}%".format(median))
         plt.legend(loc="best")
         plt.show();
 
@@ -275,7 +278,6 @@ class Analyzer():
 
     # trades analysis
     def show_trades_analysis(self,trades):
-        
         self.plot_ret_dist(trades)
         self.plot_holding_period_dist(trades)
         self.plot_signal_response(trades)

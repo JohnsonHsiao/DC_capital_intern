@@ -24,8 +24,8 @@ import pytz
 def get_data(coin):
     try:
         pair = f'{coin}USDT'
-        # df = pd.read_hdf(f'Y:\\price_data\\binance\\1m\\{pair}_PERPETUAL.h5')
-        df = pd.read_hdf(f'/Volumes/crypto_data/price_data/binance/1m/{pair}_PERPETUAL.h5')
+        df = pd.read_hdf(f'Y:\\price_data\\binance\\1m\\{pair}_PERPETUAL.h5')
+        # df = pd.read_hdf(f'/Volumes/crypto_data/price_data/binance/1m/{pair}_PERPETUAL.h5')
     except:
         df = pd.read_hdf(f'/Users/johnsonhsiao/{pair}_PERPETUAL.h5')
         # df = pd.read_hdf(f'C:\\Users\\Intern\\Desktop\\{pair}_PERPETUAL.h5')
@@ -61,30 +61,27 @@ class Strategy(BackTester):
         window_l_d = int(params['window_l_d'])
         window_s_k = int(params['window_s_k'])
         window_s_d = int(params['window_s_d'])
-        upper_bound = 100
-        rv_sum = 24
-        rv_rolling = 128
-
-        df['log_rtn_sq'] = np.square(np.log(df['close']/df['close'].shift(1)))
-        df['RV'] = np.sqrt(df['log_rtn_sq'].rolling(rv_sum).sum())
-        df['RV_pctrank'] = df['RV'].rolling(rv_rolling).rank(pct=True)*100
-        RV_filter = (df['RV_pctrank'] > 100-upper_bound) & (df['RV_pctrank'] < upper_bound)
+        # window_ma = int(params['window_ma'])
 
         df.ta.stoch(high='high', low='low', close='close', k=window_l_k, d=window_l_d, append=True)
         df.ta.stoch(high='high', low='low', close='close', k=window_s_k, d=window_s_d, append=True)
-
+        
         df['double_l_d'] = df[f'STOCHd_{window_l_k}_{window_l_d}_3'].ewm(span=window_l_d, adjust=False).mean()
         df['double_s_d'] = df[f'STOCHd_{window_s_k}_{window_s_d}_3'].ewm(span=window_s_d, adjust=False).mean()
         df['double_l_dd'] = df['double_l_d'].ewm(span=window_l_d, adjust=False).mean()
         df['double_s_dd'] = df['double_s_d'].ewm(span=window_s_d, adjust=False).mean()
+        
+        # ma = df['close'].rolling(window=window_ma, min_periods=1, center=False).mean()
+        # reverse_l = (df['close'] > ma.shift(1)) & (df['close'] < ma)
+        # reverse_s = (df['close'] < ma.shift(1)) & (df['close'] > ma)
 
         long_entry = (df[f'STOCHd_{window_l_k}_{window_l_d}_3'] > df['double_l_dd']) & \
-                    (df[f'STOCHd_{window_l_k}_{window_l_d}_3'].shift(1) < df['double_l_dd'].shift(1)) & RV_filter#& df['is_weekday'] 
-        long_exit = (df[f'STOCHd_{window_l_k}_{window_l_d}_3'] < df['double_l_d'])
+                    (df[f'STOCHd_{window_l_k}_{window_l_d}_3'].shift(1) < df['double_l_dd'].shift(1)) 
+        long_exit = (df[f'STOCHd_{window_l_k}_{window_l_d}_3'] < df['double_l_d']) #| reverse_l
 
         short_entry = (df[f'STOCHd_{window_s_k}_{window_s_d}_3'] < df['double_s_dd']) & \
-                    (df[f'STOCHd_{window_s_k}_{window_s_d}_3'].shift(1) > df['double_s_dd'].shift(1)) & RV_filter
-        short_exit = (df[f'STOCHd_{window_s_k}_{window_s_d}_3'] > df['double_s_d']) #| ~RV_filter
+                    (df[f'STOCHd_{window_s_k}_{window_s_d}_3'].shift(1) > df['double_s_dd'].shift(1)) 
+        short_exit = (df[f'STOCHd_{window_s_k}_{window_s_d}_3'] > df['double_s_d'])#| reverse_s
         
         if side == 'long':
             short_entry = False
@@ -104,7 +101,7 @@ class Strategy(BackTester):
                                         short_entries=short_entry,
                                         short_exits=short_exit,
                                         # sl_stop= 0.1,
-                                        upon_opposite_entry='reverse'
+                                        # upon_opposite_entry='reverse'
                                         )
         return pf, params
 
