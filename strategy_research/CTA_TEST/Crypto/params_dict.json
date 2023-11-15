@@ -1,0 +1,30 @@
+{
+  "bband": {"window_size": [12,400,4],
+            "multiplier": [2,3,0.5]},
+    
+  "bband_squeeze":{"window_size": [12,400,4],
+                    "multiplier": [2,3,0.5],
+                    "bigger_width":[5,10,0.5],
+                    "smaller_width":[1,5,0.5]},
+    
+  "donchian_ma":{"uchannel":[10,400,8],
+                  "lchannel":[10,400,8],
+                  "ma_window":[10,200,8]},
+
+  "kd_smoother":{"window_l_k": [12, 300, 12],
+                 "window_l_d": [12, 300, 12],
+                 "window_s_k": [12, 300, 12],
+                 "window_s_d": [12, 300, 12]},
+
+  "keltner":{"window_ma": [12,400,4],
+              "multiplier": [2,3,0.5]},
+
+  "ma_triple": {"short_window_l": [8,60,4],
+                "middle_window_l": [8,60,4],
+                "long_window_l": [8,60,4],
+                "short_window_s": [8,60,4],
+                "middle_window_s": [8,60,4],
+                "long_window_s": [8,60,4]},
+
+  "weekend":{"window": [12,400,4]}
+}
