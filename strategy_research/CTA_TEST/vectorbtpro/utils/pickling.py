@@ -214,7 +214,7 @@ def load(path: tp.PathLike, compression: tp.Union[None, bool, str] = None, **kwa
     return loads(bytes_, compression=compression, **kwargs)
 
 
-# @attr.s(frozen=True)
+@attr.s(frozen=True)
 class RecState:
     """Class that represents a state used to reconstruct an instance."""
 
@@ -228,7 +228,7 @@ class RecState:
     """Dictionary with names and values of writeable attributes."""
 
 
-# @attr.s(frozen=True)
+@attr.s(frozen=True)
 class RecInfo:
     """Class that represents information needed to reconstruct an instance."""
 
