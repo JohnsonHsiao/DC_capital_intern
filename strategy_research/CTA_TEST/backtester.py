@@ -1,6 +1,7 @@
 import os 
 import sys
 import importlib
+import time
 import warnings
 import gc
 import traceback
@@ -15,7 +16,7 @@ strategy_folders = [folder for folder in os.listdir(strategy_path) if os.path.is
 
 start = '2022-01-01'
 end = '2023-05-01'
-symbol_list = ['ETH','BTC','BNB','SOL','MATIC',
+_list = ['ETH','BTC','BNB','SOL','MATIC',
                'XRP','DYDX','AVAX','LINK','GAS',
                'DOGE','ORDI','TRB','WLD','ADA',
                'OP','FIL','ZRX','LTC','RUNE','ATOM',
@@ -34,7 +35,6 @@ strategies = {}
 for strategy_folder in ['donchian_ma','keltner','weekend']:
     module_name = f'Crypto.{strategy_folder}.{strategy_folder}'
     print(strategy_folder)
-
     strategy_module = importlib.import_module(module_name)
     StrategyClass = getattr(strategy_module, 'Strategy')
     get_data_function = getattr(strategy_module, 'get_data')
@@ -42,8 +42,8 @@ for strategy_folder in ['donchian_ma','keltner','weekend']:
     sample_sets = [[start,end]]
     for freq in ['15T','1h']:
         config = {'freq':freq,'lag':1, 'fee': 0.0003, 'weekend_filter': False}
-        for symbol in symbol_list:
-            if os.path.exists(f"C:\\Users\\Intern\\Documents\\intern_research_nb\\strategy_research\\CTA_TEST\\Crypto\\{strategy_folder}\\opt\\{freq}\\{symbol}"):
+        for symbol in _list:
+            if os.path.exists(f"{strategy_path}/{strategy_folder}/opt/{freq}/{symbol}"):
                 continue
             else:
                 print(symbol)
@@ -53,12 +53,12 @@ for strategy_folder in ['donchian_ma','keltner','weekend']:
                         get_data_func=get_data_function,
                         params=params,
                         config=config,
-                        symbol_list=list(symbol),
+                        symbol_list=[symbol],
                         start=start,
-                        end=end,
-                        save_path= f'{strategy_path}/{strategy_folder}/'
+                        end=end
                         )
-                    all_params = multi_test.multi_params(symbol_list,sample_sets,direction='L/S')
+                    print([symbol])
+                    all_params = multi_test.multi_params([symbol],sample_sets,direction='L/S')
                     trades, value_df = multi_test.multi_params_result(all_params)
                     del all_params
                     del trades
@@ -67,4 +67,5 @@ for strategy_folder in ['donchian_ma','keltner','weekend']:
                 except Exception as e:
                     print("An error occurred:", e)
                     traceback.print_exc()
+                    time.sleep(10)
 

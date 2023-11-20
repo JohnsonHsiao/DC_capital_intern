@@ -1,6 +1,7 @@
 # from .BackTester import BackTester
 from .Analyzer import Analyzer
 from tabulate import tabulate
+import traceback
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
@@ -58,6 +59,7 @@ class MultiTester():
         strategy = self.Strategy(df=df, configs=self.config)
         analyze = Analyzer(strategy)
         if side == 'L/S':
+            freq = self.config['freq']
             if not os.path.exists(f"{self.save_path}opt/{freq}/{symbol}"):
                 os.makedirs(f"{self.save_path}opt/{freq}/{symbol}")
             print(f'\n---------- {symbol} Long ----------')
@@ -96,7 +98,6 @@ class MultiTester():
             trades = pd.concat([long_trades,short_trades]).sort_values('Entry Index')
             period_df = analyze.show_period_analysis(trades,period='Q')
             print(tabulate(period_df, headers='keys', tablefmt='psql')) # type: ignore
-            freq = self.config['freq']
             if not os.path.exists(f"{self.save_path}opt/{freq}/{symbol}"):
                 os.makedirs(f"{self.save_path}opt/{freq}/{symbol}")
             long_record_df.to_csv(f'{self.save_path}opt/{freq}/{symbol}/long_record_df.csv')
@@ -216,7 +217,8 @@ class MultiTester():
                     try:
                         self.run_optimize_test(symbol,side=side,sep=sep,df_use_cache=df_use_cache)
                     except Exception as e:
-                        print(e)
+                        traceback.print_exc()
+
 
             if rolling == True:
                 for side in side_list:

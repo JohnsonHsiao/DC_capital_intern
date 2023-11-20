@@ -28,7 +28,7 @@ def get_data(coin):
         pair = f'{coin}USDT'
         df = pd.read_hdf(f'Y:\\price_data\\binance\\1m\\{pair}_PERPETUAL.h5')
     except:
-        df = pd.read_hdf(f'Volumes/binance/1m/{pair}_PERPETUAL.h5')
+        df = pd.read_hdf(f'/Volumes/crypto_data/price_data/binance/1m/{pair}_PERPETUAL.h5')
     return df
 
 class Strategy(BackTester):
