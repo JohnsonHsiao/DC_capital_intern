@@ -70,7 +70,7 @@ class Strategy(BackTester):
 
         # 空單
         short_entry = ((df['close'].shift(1) > df['ma']) & (df['close'] < df['ma']) & (df['ma'] < df['ma'].shift(1))) | \
-                      ((df['close'].shift(1) > df['uband']) & (df['close'] < df['lband']))        
+                      ((df['close'].shift(1) > df['uband']) & (df['close'] < df['uband']))        
                     
         short_exit = (df['ma'] > df['ma'].shift(1)) | ((df['close'].shift(1) < df['ma']) & (df['close'] > df['ma'])) | \
                      ((df['close'].shift(1) > df['lband']) & (df['close'] < df['lband']))
