@@ -28,34 +28,32 @@ symbol_list = ['ETH','BTC','BNB','SOL','MATIC',
 with open(f'{strategy_path}/params_dict.json', 'r') as file:
     params_dict = json.load(file)
 strategies = {}
-for strategy_folder in ['bband_squeeze','donchian_ma','keltner']:
+for strategy_folder in ['donchian_ma','keltner']:
     module_name = f'Crypto.{strategy_folder}.{strategy_folder}'
     print(strategy_folder)
-    try:
-        strategy_module = importlib.import_module(module_name)
-        StrategyClass = getattr(strategy_module, 'Strategy')
-        get_data_function = getattr(strategy_module, 'get_data')
-        params = params_dict[strategy_folder]
-        sample_sets = [[start,end]]
-        for freq in ['15T','1h']:
-            config = {'freq':freq, 'lag':1, 'fee': 0.0003, 'weekend_filter': False}
-            
-            multi_test = MultiTester(
-                StrategyClass,
-                get_data_func=get_data_function,
-                params=params,
-                config=config,
-                symbol_list=symbol_list,
-                start=start,
-                end=end,
-                save_path= f'{strategy_path}/{strategy_folder}/'
-                )
-            try:
-                all_params = multi_test.multi_params(symbol_list,sample_sets,direction='L/S')
-                trades, value_df = multi_test.multi_params_result(all_params)
-            except Exception as e:
-                print(e)
-                pass
-    except (ImportError, AttributeError) as e:
-        print(f"Error importing {module_name}: {e}")
+    # try:
+    strategy_module = importlib.import_module(module_name)
+    StrategyClass = getattr(strategy_module, 'Strategy')
+    get_data_function = getattr(strategy_module, 'get_data')
+    params = params_dict[strategy_folder]
+    sample_sets = [[start,end]]
+    for freq in ['15T','1h']:
+        config = {'freq':freq, 'lag':1, 'fee': 0.0003, 'weekend_filter': False}
+        multi_test = MultiTester(
+            StrategyClass,
+            get_data_func=get_data_function,
+            params=params,
+            config=config,
+            symbol_list=symbol_list,
+            start=start,
+            end=end,
+            save_path= f'{strategy_path}/{strategy_folder}/'
+            )
+        # try:
+        all_params = multi_test.multi_params(symbol_list,sample_sets,direction='L/S')
+        trades, value_df = multi_test.multi_params_result(all_params)
+        raise
+        # except Exception as e:
+        #     print(e)
+        #     pass
 

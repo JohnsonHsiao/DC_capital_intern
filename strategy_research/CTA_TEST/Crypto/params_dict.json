@@ -7,9 +7,9 @@
                     "bigger_width":[5,10,0.5],
                     "smaller_width":[1,5,0.5]},
     
-  "donchian_ma":{"uchannel":[10,400,8],
-                  "lchannel":[10,400,8],
-                  "ma_window":[10,200,8]},
+  "donchian_ma":{"uchannel":[10,240,12],
+                  "lchannel":[10,240,12],
+                  "ma_window":[10,240,12]},
 
   "kd_smoother":{"window_l_k": [12, 300, 12],
                  "window_l_d": [12, 300, 12],
