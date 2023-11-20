@@ -5,7 +5,7 @@ import pandas_ta as ta
 import matplotlib.pyplot as plt
 import numpy as np
 import numba as nb
-
+import gc
 import warnings
 import optuna # type: ignore
 import time
@@ -180,7 +180,6 @@ class BackTester():
 
         t = time.time()
         if len(params_list) > 250:            
-            
             def func(_strategy, train, side, p): # type: ignore
                 pf, p = _strategy(train, side, **p) # type: ignore
                 return pf, p, pf.stats(), pf.value  # type: ignore
@@ -207,6 +206,8 @@ class BackTester():
             result_df = result_df.sort_values(target,ascending=True)
         result_df['side'] = side
         return result_df.drop(columns=['pf'])
+        del result_df
+        gc.collect()
 
 
     def get_best_index(self,value_df,_start,_sep,target,direction):

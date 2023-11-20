@@ -58,7 +58,8 @@ class MultiTester():
         strategy = self.Strategy(df=df, configs=self.config)
         analyze = Analyzer(strategy)
         if side == 'L/S':
-            
+            if not os.path.exists(f"{self.save_path}opt/{freq}/{symbol}"):
+                os.makedirs(f"{self.save_path}opt/{freq}/{symbol}")
             print(f'\n---------- {symbol} Long ----------')
             long_record_df = strategy.optimize(
                                         side='long',

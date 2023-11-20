@@ -28,6 +28,7 @@ def get_data(coin):
         pair = f'{coin}USDT'
         df = pd.read_hdf(f'Y:\\price_data\\binance\\1m\\{pair}_PERPETUAL.h5')
     except:
+        raise
         df = pd.read_hdf(f'/Users/johnsonhsiao/{pair}_PERPETUAL.h5')
     return df
 
