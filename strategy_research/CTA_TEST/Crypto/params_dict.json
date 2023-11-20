@@ -2,7 +2,7 @@
   "bband": {"window_size": [12,400,4],
             "multiplier": [2,3,0.5]},
     
-  "bband_squeeze":{"window_size": [12,400,4],
+  "bband_squeeze":{"window_size": [12,240,4],
                     "multiplier": [2,3,0.5],
                     "bigger_width":[5,10,0.5],
                     "smaller_width":[1,5,0.5]},

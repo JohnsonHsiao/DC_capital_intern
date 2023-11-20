@@ -20,7 +20,8 @@ class MultiTester():
         config={'freq':'5min','fee': 0.0005},
         symbol_list=['BTC','ETH','SOL','DOGE'],
         start='',
-        end=''
+        end='',
+        save_path=''
         ):
         
         self.Strategy = Strategy
@@ -30,6 +31,7 @@ class MultiTester():
         self.config = config
         self.start = start
         self.end = end
+        self.save_path = save_path
         self.df_cache = {}
         self.optimize_cache = {}
         self.rolling_cache = {}
@@ -67,7 +69,7 @@ class MultiTester():
                                         end=sep
                                         )
             print(long_record_df['params'].iloc[0])
-            analyze.show_pf_analysis(long_record_df['params'].iloc[0], 'long', symbol, axv_index=[_sep])
+            # analyze.show_pf_analysis(long_record_df['params'].iloc[0], 'long', symbol, axv_index=[_sep])
             self.optimize_cache[symbol]['long'] = long_record_df
             
             print(f'\n---------- {symbol} Short ----------')
@@ -80,24 +82,24 @@ class MultiTester():
                                         end=sep
                                         )
             print(short_record_df['params'].iloc[0])
-            analyze.show_pf_analysis(short_record_df['params'].iloc[0], 'short', symbol, axv_index=[_sep])
+            # analyze.show_pf_analysis(short_record_df['params'].iloc[0], 'short', symbol, axv_index=[_sep])
             self.optimize_cache[symbol]['short'] = short_record_df
 
             print(f'-------- {symbol} L/S --------')
             long_pf = strategy.strategy(side = 'long', params=long_record_df.iloc[0]['params'])
             short_pf = strategy.strategy(side = 'short', params=short_record_df.iloc[0]['params'])
             value = (long_pf.value + short_pf.value - 2* long_pf.init_cash) * 100 / long_pf.init_cash
-            analyze.show_value_analyze(value,f'{symbol} L/S',axv_index=[_sep])
+            # analyze.show_value_analyze(value,f'{symbol} L/S',axv_index=[_sep])
             long_trades = long_pf.trades.records_readable 
             short_trades = short_pf.trades.records_readable
             trades = pd.concat([long_trades,short_trades]).sort_values('Entry Index')
             period_df = analyze.show_period_analysis(trades,period='Q')
             print(tabulate(period_df, headers='keys', tablefmt='psql')) # type: ignore
             freq = self.config['freq']
-            if not os.path.exists(f"opt/{symbol}-{freq}"):
-                os.makedirs(f"opt/{symbol}-{freq}")
-            long_record_df.to_csv(f'opt/{symbol}-{freq}/long_record_df.csv')
-            short_record_df.to_csv(f'opt/{symbol}-{freq}/short_record_df.csv')
+            if not os.path.exists(f"{self.save_path}opt/{freq}/{symbol}"):
+                os.makedirs(f"{self.save_path}opt/{freq}/{symbol}")
+            long_record_df.to_csv(f'{self.save_path}opt/{freq}/{symbol}/long_record_df.csv')
+            short_record_df.to_csv(f'{self.save_path}opt/{freq}/{symbol}/short_record_df.csv')
         else:
             record_df = strategy.optimize(
                             side=side,
@@ -112,13 +114,13 @@ class MultiTester():
             pf = strategy.strategy(side = side, params=record_df.iloc[0]['params'])
             trades = pf.trades.records_readable
             self.optimize_cache[symbol][side] = record_df
-            analyze.show_pf_analysis(record_df['params'].iloc[0], side, symbol, axv_index=[_sep])
+            # analyze.show_pf_analysis(record_df['params'].iloc[0], side, symbol, axv_index=[_sep])
             period_df = analyze.show_period_analysis(trades,period='Q')
             print(tabulate(period_df, headers='keys', tablefmt='psql'))
             freq = self.config['freq']
-            if not os.path.exists(f"opt/{symbol}-{freq}"):
-                os.makedirs(f"opt/{symbol}-{freq}")
-            record_df.to_csv(f"opt/{symbol}-{freq}/{side}_record_df.csv")
+            if not os.path.exists(f"{self.save_path}{freq}/{symbol}"):
+                os.makedirs(f"{self.save_path}{freq}/{symbol}")
+            record_df.to_csv(f"{self.save_path}{freq}/{symbol}/{side}_record_df.csv")
 
     def run_rolling_test(self,symbol,side='L/S',intervals=[16,4],expanding=True):
         self.rolling_cache[symbol] = {}
