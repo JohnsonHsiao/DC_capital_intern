@@ -15,7 +15,7 @@ def get_data(df_dict, coin):
 strategy_path = os.path.join(sys.path[0], 'Crypto')
 # strategy_folders = [folder for folder in os.listdir(strategy_path) if os.path.isdir(os.path.join(strategy_path, folder))]
 # strategy_folders = ['bband_squeeze','weekend', 'donchian_ma', 'bband', 'keltner']
-strategy_folders = ['donchian_ma']
+strategy_folders = ['kd_smoother']
 
 start = '2022-01-01'
 
@@ -44,8 +44,8 @@ for strategy_name in strategy_folders:
                     outsample_result['params'][coin][direction] = {}
                     i = 0
                     keys = list(params_dict[freq][coin][direction].keys())
-                    if len(keys) >= 500:
-                        random_keys = random.sample(keys, 500)
+                    if len(keys) >= 100:
+                        random_keys = random.sample(keys, 100)
                         keys = random_keys
                     for idx in tqdm(keys):
                         param = eval(params_dict[freq][coin][direction][idx].replace("'", '"'))
@@ -64,8 +64,8 @@ for strategy_name in strategy_folders:
                         gc.collect
                 if str(1) not in outsample_result['params'][coin]['long'].keys() and str(1) not in outsample_result['params'][coin]['short'].keys():
                     outsample_result['params'].pop(coin)
-            os.makedirs(f'{strategy_path}/{strategy_name}/opt2/', exist_ok=True)
-            with open(f'{strategy_path}/{strategy_name}/opt2/{freq}_outsample.json', 'w') as file:
+            os.makedirs(f'{strategy_path}/{strategy_name}/opt/', exist_ok=True)
+            with open(f'{strategy_path}/{strategy_name}/opt/{freq}_outsample.json', 'w') as file:
                 json.dump(outsample_result, file, indent=4)
                 
                 
