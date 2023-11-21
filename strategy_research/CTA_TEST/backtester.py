@@ -7,13 +7,19 @@ import pandas as pd
 import gc
 import traceback
 import json
+import pickle
 warnings.filterwarnings("ignore")
 
 from src.strategy.MultiTester import MultiTester
+    
+def get_data(df_dict, coin):
+    return df_dict[coin]
 
 strategy_path = os.path.join(sys.path[0], 'Crypto')
-
 strategy_folders = [folder for folder in os.listdir(strategy_path) if os.path.isdir(os.path.join(strategy_path, folder))]
+with open(f'{strategy_path}/params_dict.json', 'r') as file:
+    params_dict = json.load(file)
+strategies = {}
 
 start = '2022-01-01'
 end = '2023-05-01'
@@ -29,27 +35,27 @@ _list = ['ETH','BTC','BNB','SOL','MATIC',
                'BLUR','SUSHI','WAVES','MASK','MANA',
                'EGLD','AAVE','NEO','FET','TRX','GRT','ALGO','STX','XLM']
 
-df_dict = {}
-for coin in _list:
-    print(f'loading {coin}...')
-    try:
-        pair = f'{coin}USDT'
-        df = pd.read_hdf(f'Y:\\price_data\\binance\\1m\\{pair}_PERPETUAL.h5')
-        df_dict[coin] = df
-    except:
+if not os.path.exists("df_dict.pkl"):
+    df_dict = {}
+    for coin in _list:
+        print(f'loading {coin}...')
         try:
-            # df = pd.read_hdf(f'/Volumes/crypto_data/price_data/binance/1m/{pair}_PERPETUAL.h5')
-            df = pd.read_hdf(f'/Users/johnsonhsiao/Desktop/data/{pair}_PERPETUAL.h5')
+            pair = f'{coin}USDT'
+            df = pd.read_hdf(f'Y:\\price_data\\binance\\1m\\{pair}_PERPETUAL.h5')
             df_dict[coin] = df
         except:
-            pass
-    
-def get_data(df_dict, coin):
-    return df_dict[coin]
+            try:
+                # df = pd.read_hdf(f'/Volumes/crypto_data/price_data/binance/1m/{pair}_PERPETUAL.h5')
+                df = pd.read_hdf(f'/Users/johnsonhsiao/Desktop/data/{pair}_PERPETUAL.h5')
+                df_dict[coin] = df
+            except:
+                pass
 
-with open(f'{strategy_path}/params_dict.json', 'r') as file:
-    params_dict = json.load(file)
-strategies = {}
+    with open('df_dict.pkl', 'wb') as handle:
+        pickle.dump(df_dict, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+with open('df_dict.pkl', 'rb') as handle:
+    df_dict = pickle.load(handle)
 
 for strategy_folder in ['kd_smoother','ma_triple']:
     module_name = f'Crypto.{strategy_folder}.{strategy_folder}'
