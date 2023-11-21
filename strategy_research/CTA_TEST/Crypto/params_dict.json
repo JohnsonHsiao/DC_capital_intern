@@ -11,20 +11,16 @@
                   "lchannel":[10,240,15],
                   "ma_window":[10,240,15]},
 
-  "kd_smoother":{"window_l_k": [12, 240, 15],
-                 "window_l_d": [12, 240, 15],
-                 "window_s_k": [12, 240, 15],
-                 "window_s_d": [12, 240, 15]},
+  "kd_smoother":{"window_k": [12, 240, 15],
+                 "window_d": [12, 240, 15],
+                 "window_ma": [12, 240, 15]},
 
   "keltner":{"window_ma": [12,400,4],
               "multiplier": [2,3,0.5]},
 
-  "ma_triple": {"short_window_l": [8,60,12],
-                "middle_window_l": [8,60,12],
-                "long_window_l": [8,60,12],
-                "short_window_s": [8,60,12],
-                "middle_window_s": [8,60,12],
-                "long_window_s": [8,60,12]},
+  "ma_triple": {"short_window": [8,60,12],
+                "middle_window": [8,60,12],
+                "long_window": [8,60,12]},
 
   "weekend":{"window": [12,400,4]}
 }

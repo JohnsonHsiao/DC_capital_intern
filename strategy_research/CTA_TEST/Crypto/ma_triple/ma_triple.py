@@ -53,17 +53,13 @@ class Strategy(BackTester):
     def _strategy(self, df, side='both', **params):
         
         # params
-        short_window_l = int(params['short_window_l'])
-        middle_window_l = int(params['middle_window_l']) + short_window_l
-        long_window_l = int(params['long_window_l']) + middle_window_l
-        short_window_s = int(params['short_window_s'])
-        middle_window_s = int(params['middle_window_s']) + short_window_s
-        long_window_s = int(params['long_window_s']) + middle_window_s
+        short_window = int(params['short_window'])
+        middle_window = int(params['middle_window']) + short_window
+        long_window = int(params['long_window']) + middle_window
 
-        
-        df['short_ma'] = df['close'].rolling(window=short_window_l).mean()
-        df['middle_ma'] = df['close'].rolling(window=middle_window_l).mean()
-        df['long_ma'] = df['close'].rolling(window=long_window_l).mean()
+        df['short_ma'] = df['close'].rolling(window=short_window).mean()
+        df['middle_ma'] = df['close'].rolling(window=middle_window).mean()
+        df['long_ma'] = df['close'].rolling(window=long_window).mean()
         
         # 多單
         long_entry = (df['short_ma'].shift(1) < df['middle_ma'].shift(1)) & \
@@ -71,9 +67,9 @@ class Strategy(BackTester):
         long_exit = ((df['short_ma'].shift(1) > df['middle_ma'].shift(1)) & (df['short_ma'] < df['middle_ma'])) | \
                     ((df['middle_ma'].shift(1) > df['long_ma'].shift(1)) & (df['middle_ma'] < df['long_ma']))
 
-        df['short_ma'] = df['close'].rolling(window=short_window_s).mean()
-        df['middle_ma'] = df['close'].rolling(window=middle_window_s).mean()
-        df['long_ma'] = df['close'].rolling(window=long_window_s).mean()
+        df['short_ma'] = df['close'].rolling(window=short_window).mean()
+        df['middle_ma'] = df['close'].rolling(window=middle_window).mean()
+        df['long_ma'] = df['close'].rolling(window=long_window).mean()
 
         # 空單
         short_entry = (df['short_ma'].shift(1) > df['middle_ma'].shift(1)) & \

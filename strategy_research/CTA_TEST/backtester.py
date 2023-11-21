@@ -44,9 +44,6 @@ for coin in _list:
         except:
             pass
     
-    
-print('done')
-    
 def get_data(df_dict, coin):
     return df_dict[coin]
 
@@ -54,7 +51,7 @@ with open(f'{strategy_path}/params_dict.json', 'r') as file:
     params_dict = json.load(file)
 strategies = {}
 
-for strategy_folder in ['bband_squeeze','weekend']:
+for strategy_folder in ['kd_smoother','ma_triple']:
     module_name = f'Crypto.{strategy_folder}.{strategy_folder}'
     print(strategy_folder)
     strategy_module = importlib.import_module(module_name)
