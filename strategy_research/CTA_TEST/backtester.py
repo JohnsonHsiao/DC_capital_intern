@@ -31,13 +31,14 @@ _list = ['ETH','BTC','BNB','SOL','MATIC',
 
 df_dict = {}
 for coin in _list:
+    print(f'loading {coin}...')
     try:
         pair = f'{coin}USDT'
         df = pd.read_hdf(f'Y:\\price_data\\binance\\1m\\{pair}_PERPETUAL.h5')
     except:
         df = pd.read_hdf(f'/Volumes/crypto_data/price_data/binance/1m/{pair}_PERPETUAL.h5')
     df_dict[coin] = df
-    print('loding data...')
+    
 print('done')
     
 def get_data(df_dict, coin):
@@ -47,7 +48,7 @@ with open(f'{strategy_path}/params_dict.json', 'r') as file:
     params_dict = json.load(file)
 strategies = {}
 
-for strategy_folder in ['donchian_ma','keltner','bband_squeeze','weekend']:
+for strategy_folder in ['bband_squeeze','weekend']:
     module_name = f'Crypto.{strategy_folder}.{strategy_folder}'
     print(strategy_folder)
     strategy_module = importlib.import_module(module_name)
