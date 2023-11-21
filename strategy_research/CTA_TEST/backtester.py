@@ -49,7 +49,7 @@ with open(f'{strategy_path}/params_dict.json', 'r') as file:
     params_dict = json.load(file)
 strategies = {}
 
-for strategy_folder in ['keltner','weekend','squeeze_ma']:
+for strategy_folder in ['bband_squeeze','weekend']:
     module_name = f'Crypto.{strategy_folder}.{strategy_folder}'
     print(strategy_folder)
     strategy_module = importlib.import_module(module_name)

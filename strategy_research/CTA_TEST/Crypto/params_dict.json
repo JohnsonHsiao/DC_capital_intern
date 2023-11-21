@@ -2,10 +2,10 @@
   "bband": {"window_size": [12,400,4],
             "multiplier": [2,3,0.5]},
     
-  "bband_squeeze":{"window_size": [12,240,4],
+  "bband_squeeze":{"window_size": [12,240,8],
                     "multiplier": [2,3,0.5],
-                    "bigger_width":[5,10,0.5],
-                    "smaller_width":[1,5,0.5]},
+                    "bigger_width":[5,10,1],
+                    "smaller_width":[1,5,1]},
     
   "donchian_ma":{"uchannel":[10,240,15],
                   "lchannel":[10,240,15],
