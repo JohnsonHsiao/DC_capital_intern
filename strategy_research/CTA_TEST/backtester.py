@@ -22,10 +22,10 @@ _list = ['ETH','BTC','BNB','SOL','MATIC',
                'DOGE','ORDI','TRB','WLD','ADA',
                'OP','FIL','ZRX','LTC','RUNE','ATOM',
                'ARB','GMT','ETC','ARK','BCH','DOT',
-               '1000PEPE','LDO','SUI','GALA','CAKE',
+               'LDO','SUI','GALA','CAKE',
                'APE','INJ','FTM','APT','YFI','OMG',
-               'SEI','EOS','1000SHIB','NEAR','STORJ',
-               '1000FLOKI','MKR','CYBER','UNI','STRAX',
+               'SEI','EOS','1000SHIB','NEAR',
+               'MKR','CYBER','UNI',
                'BLUR','SUSHI','WAVES','MASK','MANA',
                'EGLD','AAVE','NEO','FET','TRX','GRT','ALGO','STX','XLM']
 
@@ -35,7 +35,8 @@ for coin in _list:
         pair = f'{coin}USDT'
         df = pd.read_hdf(f'Y:\\price_data\\binance\\1m\\{pair}_PERPETUAL.h5')
     except:
-        df = pd.read_hdf(f'/Volumes/crypto_data/price_data/binance/1m/{pair}_PERPETUAL.h5')
+        # df = pd.read_hdf(f'/Volumes/crypto_data/price_data/binance/1m/{pair}_PERPETUAL.h5')
+        df = pd.read_hdf(f'/Users/johnsonhsiao/Desktop/data/{pair}_PERPETUAL.h5')
     df_dict[coin] = df
     print('loding data...')
 print('done')
@@ -47,7 +48,7 @@ with open(f'{strategy_path}/params_dict.json', 'r') as file:
     params_dict = json.load(file)
 strategies = {}
 
-for strategy_folder in ['donchian_ma','keltner','bband_squeeze','weekend']:
+for strategy_folder in ['keltner','weekend','squeeze_ma']:
     module_name = f'Crypto.{strategy_folder}.{strategy_folder}'
     print(strategy_folder)
     strategy_module = importlib.import_module(module_name)
