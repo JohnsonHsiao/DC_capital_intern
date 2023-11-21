@@ -3,6 +3,7 @@ import sys
 import importlib
 import time
 import warnings
+import pandas as pd
 import gc
 import traceback
 import json
@@ -28,6 +29,20 @@ _list = ['ETH','BTC','BNB','SOL','MATIC',
                'BLUR','SUSHI','WAVES','MASK','MANA',
                'EGLD','AAVE','NEO','FET','TRX','GRT','ALGO','STX','XLM']
 
+df_dict = {}
+for coin in _list:
+    try:
+        pair = f'{coin}USDT'
+        df = pd.read_hdf(f'Y:\\price_data\\binance\\1m\\{pair}_PERPETUAL.h5')
+    except:
+        df = pd.read_hdf(f'/Volumes/crypto_data/price_data/binance/1m/{pair}_PERPETUAL.h5')
+    df_dict[coin] = df
+    print('loding data...')
+print('done')
+    
+def get_data(df_dict, coin):
+    return df_dict[coin]
+
 with open(f'{strategy_path}/params_dict.json', 'r') as file:
     params_dict = json.load(file)
 strategies = {}
@@ -37,7 +52,7 @@ for strategy_folder in ['donchian_ma','keltner','bband_squeeze','weekend']:
     print(strategy_folder)
     strategy_module = importlib.import_module(module_name)
     StrategyClass = getattr(strategy_module, 'Strategy')
-    get_data_function = getattr(strategy_module, 'get_data')
+    get_data_function = eval('get_data')
     params = params_dict[strategy_folder]
     sample_sets = [[start,end]]
     for freq in ['5T','15T','1h','4h']:
@@ -52,6 +67,7 @@ for strategy_folder in ['donchian_ma','keltner','bband_squeeze','weekend']:
                         StrategyClass,
                         get_data_func=get_data_function,
                         params=params,
+                        df_dict=df_dict,
                         config=config,
                         symbol_list=[symbol],
                         start=start,

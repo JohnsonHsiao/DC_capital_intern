@@ -17,6 +17,7 @@ class MultiTester():
         self,
         Strategy,
         params,
+        df_dict,
         get_data_func,
         config={'freq':'5min','fee': 0.0005},
         symbol_list=['BTC','ETH','SOL','DOGE'],
@@ -36,11 +37,12 @@ class MultiTester():
         self.df_cache = {}
         self.optimize_cache = {}
         self.rolling_cache = {}
+        self.df_dict = df_dict
 
     def get_data(self,symbol,use_cache=True):
-        if symbol in list(self.df_cache.keys()) and use_cache==True:
-            return self.df_cache[symbol]
-        df = self.get_data_func(symbol)
+        # if symbol in list(self.df_cache.keys()) and use_cache==True:
+        #     return self.df_cache[symbol]
+        df = self.get_data_func(self.df_dict,symbol)
         if len(self.start)!=0:
             df = df.loc[self.start:]
         if len(self.end)!=0:
