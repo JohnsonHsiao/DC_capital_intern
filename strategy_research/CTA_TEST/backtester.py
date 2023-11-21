@@ -32,7 +32,7 @@ with open(f'{strategy_path}/params_dict.json', 'r') as file:
     params_dict = json.load(file)
 strategies = {}
 
-for strategy_folder in ['donchian_ma','keltner','weekend']:
+for strategy_folder in ['donchian_ma','keltner','bband_squeeze','weekend']:
     module_name = f'Crypto.{strategy_folder}.{strategy_folder}'
     print(strategy_folder)
     strategy_module = importlib.import_module(module_name)
@@ -40,7 +40,7 @@ for strategy_folder in ['donchian_ma','keltner','weekend']:
     get_data_function = getattr(strategy_module, 'get_data')
     params = params_dict[strategy_folder]
     sample_sets = [[start,end]]
-    for freq in ['15T','1h']:
+    for freq in ['5T','15T','1h','4h']:
         config = {'freq':freq,'lag':1, 'fee': 0.0003, 'weekend_filter': False}
         for symbol in _list:
             if os.path.exists(f"{strategy_path}/{strategy_folder}/opt/{freq}/{symbol}"):
@@ -55,9 +55,9 @@ for strategy_folder in ['donchian_ma','keltner','weekend']:
                         config=config,
                         symbol_list=[symbol],
                         start=start,
-                        end=end
+                        end=end,
+                        save_path = f'{strategy_path}/{strategy_folder}/'
                         )
-                    print([symbol])
                     all_params = multi_test.multi_params([symbol],sample_sets,direction='L/S')
                     trades, value_df = multi_test.multi_params_result(all_params)
                     del all_params
@@ -66,6 +66,4 @@ for strategy_folder in ['donchian_ma','keltner','weekend']:
                     gc.collect()
                 except Exception as e:
                     print("An error occurred:", e)
-                    traceback.print_exc()
-                    time.sleep(10)
-
+                    pass
