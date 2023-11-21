@@ -69,8 +69,7 @@ class Strategy(BackTester):
         long_exit = df['width'] < smaller_width
 
         # 空單
-        short_entry = (df['width'] > bigger_width) & (df['close'] < df['lband'])
-                    
+        short_entry = (df['width'] > bigger_width) & (df['close'] < df['lband'])           
         short_exit = df['width'] < smaller_width 
                     
 

@@ -58,31 +58,26 @@ class Strategy(BackTester):
         df['is_weekday'] = df['timestamp_est'].dt.dayofweek < 5  # 0-4代表周一到周五
 
         # params
-        window_l_k = int(params['window_l_k'])
-        window_l_d = int(params['window_l_d'])
-        window_s_k = int(params['window_s_k'])
-        window_s_d = int(params['window_s_d'])
-        # window_ma = int(params['window_ma'])
+        window_k = int(params['window_k'])
+        window_d = int(params['window_d'])
+        window_ma = int(params['window_ma'])
 
-        df.ta.stoch(high='high', low='low', close='close', k=window_l_k, d=window_l_d, append=True)
-        df.ta.stoch(high='high', low='low', close='close', k=window_s_k, d=window_s_d, append=True)
+        df.ta.stoch(high='high', low='low', close='close', k=window_k, d=window_d, append=True)
+          
+        df['double_d'] = df[f'STOCHd_{window_k}_{window_d}_3'].ewm(span=window_d, adjust=False).mean()
+        df['double_dd'] = df['double_l_d'].ewm(span=window_d, adjust=False).mean()
         
-        df['double_l_d'] = df[f'STOCHd_{window_l_k}_{window_l_d}_3'].ewm(span=window_l_d, adjust=False).mean()
-        df['double_s_d'] = df[f'STOCHd_{window_s_k}_{window_s_d}_3'].ewm(span=window_s_d, adjust=False).mean()
-        df['double_l_dd'] = df['double_l_d'].ewm(span=window_l_d, adjust=False).mean()
-        df['double_s_dd'] = df['double_s_d'].ewm(span=window_s_d, adjust=False).mean()
-        
-        # ma = df['close'].rolling(window=window_ma, min_periods=1, center=False).mean()
-        # reverse_l = (df['close'] > ma.shift(1)) & (df['close'] < ma)
-        # reverse_s = (df['close'] < ma.shift(1)) & (df['close'] > ma)
+        ma = df['close'].rolling(window=window_ma, min_periods=1, center=False).mean()
+        reverse_l = (df['close'] > ma.shift(1)) & (df['close'] < ma)
+        reverse_s = (df['close'] < ma.shift(1)) & (df['close'] > ma)
 
-        long_entry = (df[f'STOCHd_{window_l_k}_{window_l_d}_3'] > df['double_l_dd']) & \
-                    (df[f'STOCHd_{window_l_k}_{window_l_d}_3'].shift(1) < df['double_l_dd'].shift(1)) 
-        long_exit = (df[f'STOCHd_{window_l_k}_{window_l_d}_3'] < df['double_l_d']) #| reverse_l
+        long_entry = (df[f'STOCHd_{window_k}_{window_d}_3'] > df['double_dd']) & \
+                    (df[f'STOCHd_{window_k}_{window_d}_3'].shift(1) < df['double_dd'].shift(1)) 
+        long_exit = (df[f'STOCHd_{window_k}_{window_d}_3'] < df['double_d']) | reverse_l
 
-        short_entry = (df[f'STOCHd_{window_s_k}_{window_s_d}_3'] < df['double_s_dd']) & \
-                    (df[f'STOCHd_{window_s_k}_{window_s_d}_3'].shift(1) > df['double_s_dd'].shift(1)) 
-        short_exit = (df[f'STOCHd_{window_s_k}_{window_s_d}_3'] > df['double_s_d'])#| reverse_s
+        short_entry = (df[f'STOCHd_{window_k}_{window_d}_3'] < df['double_dd']) & \
+                    (df[f'STOCHd_{window_k}_{window_d}_3'].shift(1) > df['double_dd'].shift(1)) 
+        short_exit = (df[f'STOCHd_{window_k}_{window_d}_3'] > df['double_d']) | reverse_s
         
         if side == 'long':
             short_entry = False
