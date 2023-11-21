@@ -26,9 +26,9 @@ import json
 def get_data(coin):
     try:
         pair = f'{coin}USDT'
-        df = pd.read_hdf(f'/Volumes/crypto_data/price_data/binance/1m/{pair}_PERPETUAL.h5')
+        df = pd.read_hdf(f'/Vol/crypto_data/price_data/binance/1m/{pair}_PERPETUAL.h5')
     except:
-        df = pd.read_hdf(f'/Users/johnsonhsiao/{pair}_PERPETUAL.h5')
+        df = pd.read_hdf(f'/Users/johnsonhsiao/Desktop/data/{pair}_PERPETUAL.h5')
     return df
 
 class Strategy(BackTester):
@@ -68,6 +68,10 @@ class Strategy(BackTester):
         long_exit = (df['ma'] < df['ma'].shift(1)) | ((df['close'].shift(1) > df['ma']) & (df['close'] < df['ma'])) | \
                     ((df['close'].shift(1) > df['uband']) & (df['close'] < df['uband']))
 
+        df['ma'] = df['close'].rolling(window=window_size).mean()
+        df['uband'] = df['ma'] + multiplier * df['close'].rolling(window=window_size).std()
+        df['lband'] = df['ma'] - multiplier * df['close'].rolling(window=window_size).std()
+        
         # 空單
         short_entry = ((df['close'].shift(1) > df['ma']) & (df['close'] < df['ma']) & (df['ma'] < df['ma'].shift(1))) | \
                       ((df['close'].shift(1) > df['uband']) & (df['close'] < df['uband']))        
