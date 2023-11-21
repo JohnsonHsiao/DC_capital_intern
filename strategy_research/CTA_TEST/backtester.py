@@ -35,10 +35,15 @@ for coin in _list:
     try:
         pair = f'{coin}USDT'
         df = pd.read_hdf(f'Y:\\price_data\\binance\\1m\\{pair}_PERPETUAL.h5')
+        df_dict[coin] = df
     except:
-        # df = pd.read_hdf(f'/Volumes/crypto_data/price_data/binance/1m/{pair}_PERPETUAL.h5')
-        df = pd.read_hdf(f'/Users/johnsonhsiao/Desktop/data/{pair}_PERPETUAL.h5')
-    df_dict[coin] = df
+        try:
+            # df = pd.read_hdf(f'/Volumes/crypto_data/price_data/binance/1m/{pair}_PERPETUAL.h5')
+            df = pd.read_hdf(f'/Users/johnsonhsiao/Desktop/data/{pair}_PERPETUAL.h5')
+            df_dict[coin] = df
+        except:
+            pass
+    
     
 print('done')
     
