@@ -31,6 +31,7 @@ _list = ['ETH','BTC','BNB','SOL','MATIC',
 
 df_dict = {}
 for coin in _list:
+    print(f'loading {coin}...')
     try:
         pair = f'{coin}USDT'
         df = pd.read_hdf(f'Y:\\price_data\\binance\\1m\\{pair}_PERPETUAL.h5')
@@ -38,7 +39,7 @@ for coin in _list:
         # df = pd.read_hdf(f'/Volumes/crypto_data/price_data/binance/1m/{pair}_PERPETUAL.h5')
         df = pd.read_hdf(f'/Users/johnsonhsiao/Desktop/data/{pair}_PERPETUAL.h5')
     df_dict[coin] = df
-    print('loding data...')
+    
 print('done')
     
 def get_data(df_dict, coin):
