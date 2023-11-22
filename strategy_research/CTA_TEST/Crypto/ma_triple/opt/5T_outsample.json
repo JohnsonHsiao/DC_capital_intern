@@ -1,0 +1,79 @@
+{
+    "params": {
+        "RUNE": {
+            "long": {
+                "0": {
+                    "short_window": 56,
+                    "middle_window": 20,
+                    "long_window": 20
+                },
+                "1": {
+                    "short_window": 44,
+                    "middle_window": 20,
+                    "long_window": 32
+                },
+                "2": {
+                    "short_window": 56,
+                    "middle_window": 20,
+                    "long_window": 32
+                },
+                "3": {
+                    "short_window": 32,
+                    "middle_window": 44,
+                    "long_window": 20
+                },
+                "4": {
+                    "short_window": 44,
+                    "middle_window": 32,
+                    "long_window": 20
+                },
+                "5": {
+                    "short_window": 44,
+                    "middle_window": 20,
+                    "long_window": 56
+                },
+                "6": {
+                    "short_window": 44,
+                    "middle_window": 20,
+                    "long_window": 20
+                },
+                "7": {
+                    "short_window": 56,
+                    "middle_window": 44,
+                    "long_window": 44
+                },
+                "8": {
+                    "short_window": 44,
+                    "middle_window": 56,
+                    "long_window": 44
+                },
+                "9": {
+                    "short_window": 20,
+                    "middle_window": 32,
+                    "long_window": 32
+                }
+            },
+            "short": {}
+        },
+        "GMT": {
+            "long": {
+                "0": {
+                    "short_window": 20,
+                    "middle_window": 32,
+                    "long_window": 20
+                },
+                "1": {
+                    "short_window": 20,
+                    "middle_window": 32,
+                    "long_window": 8
+                },
+                "2": {
+                    "short_window": 20,
+                    "middle_window": 56,
+                    "long_window": 8
+                }
+            },
+            "short": {}
+        }
+    }
+}

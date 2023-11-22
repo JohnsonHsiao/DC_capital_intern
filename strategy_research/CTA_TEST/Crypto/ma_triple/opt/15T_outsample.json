@@ -1,0 +1,40 @@
+{
+    "params": {
+        "APT": {
+            "long": {
+                "0": {
+                    "short_window": 56,
+                    "middle_window": 32,
+                    "long_window": 8
+                },
+                "1": {
+                    "short_window": 56,
+                    "middle_window": 44,
+                    "long_window": 44
+                }
+            },
+            "short": {
+                "0": {
+                    "short_window": 56,
+                    "middle_window": 32,
+                    "long_window": 8
+                }
+            }
+        },
+        "STX": {
+            "long": {
+                "0": {
+                    "short_window": 44,
+                    "middle_window": 44,
+                    "long_window": 8
+                },
+                "1": {
+                    "short_window": 56,
+                    "middle_window": 56,
+                    "long_window": 8
+                }
+            },
+            "short": {}
+        }
+    }
+}

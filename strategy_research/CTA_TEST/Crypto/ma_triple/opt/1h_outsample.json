@@ -1,0 +1,110 @@
+{
+    "params": {
+        "OP": {
+            "long": {
+                "0": {
+                    "short_window": 8,
+                    "middle_window": 44,
+                    "long_window": 56
+                },
+                "1": {
+                    "short_window": 20,
+                    "middle_window": 44,
+                    "long_window": 56
+                }
+            },
+            "short": {}
+        },
+        "GMT": {
+            "long": {
+                "0": {
+                    "short_window": 8,
+                    "middle_window": 44,
+                    "long_window": 20
+                },
+                "1": {
+                    "short_window": 8,
+                    "middle_window": 44,
+                    "long_window": 44
+                },
+                "2": {
+                    "short_window": 32,
+                    "middle_window": 44,
+                    "long_window": 44
+                },
+                "3": {
+                    "short_window": 44,
+                    "middle_window": 56,
+                    "long_window": 20
+                }
+            },
+            "short": {}
+        },
+        "INJ": {
+            "long": {
+                "0": {
+                    "short_window": 56,
+                    "middle_window": 20,
+                    "long_window": 8
+                },
+                "1": {
+                    "short_window": 32,
+                    "middle_window": 20,
+                    "long_window": 56
+                },
+                "2": {
+                    "short_window": 32,
+                    "middle_window": 20,
+                    "long_window": 20
+                },
+                "3": {
+                    "short_window": 44,
+                    "middle_window": 44,
+                    "long_window": 8
+                },
+                "4": {
+                    "short_window": 20,
+                    "middle_window": 56,
+                    "long_window": 44
+                },
+                "5": {
+                    "short_window": 20,
+                    "middle_window": 44,
+                    "long_window": 8
+                }
+            },
+            "short": {}
+        },
+        "APT": {
+            "long": {
+                "0": {
+                    "short_window": 8,
+                    "middle_window": 56,
+                    "long_window": 56
+                },
+                "1": {
+                    "short_window": 56,
+                    "middle_window": 44,
+                    "long_window": 20
+                },
+                "2": {
+                    "short_window": 56,
+                    "middle_window": 44,
+                    "long_window": 44
+                },
+                "3": {
+                    "short_window": 20,
+                    "middle_window": 8,
+                    "long_window": 32
+                }
+            },
+            "short": {
+                "0": {
+                    "short_window": 32,
+                    "middle_window": 8,
+                    "long_window": 56
+                }
+            }
+        }
+    }
+}
