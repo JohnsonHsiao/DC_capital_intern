@@ -57,7 +57,14 @@ class Strategy(BackTester):
         multiplier = int(params['multiplier'])
         
         df['ma'] = df['close'].rolling(window=window_ma).mean()
-        df['atr'] = df['high'] - df['low']
+        
+        df['High-Low'] = df['high'] - df['low']
+        df['abs(High-PreviousClose)'] = abs(df['high'] - df['low'].shift(1))
+        df['abs(Low-PreviousClose)'] = abs(df['low'] - df['close'].shift(1))
+        df['TR'] = df[['High-Low', 'abs(High-PreviousClose)', 'abs(Low-PreviousClose)']].max(axis=1)
+
+        df['atr'] = df['TR'].rolling(window=window_ma).mean()
+        
         df['upper'] = df['ma'] + multiplier * df['atr']
         df['lower'] = df['ma'] - multiplier * df['atr']
         

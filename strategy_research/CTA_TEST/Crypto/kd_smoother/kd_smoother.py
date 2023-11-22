@@ -73,11 +73,11 @@ class Strategy(BackTester):
 
         long_entry = (df[f'STOCHd_{window_k}_{window_d}_3'] > df['double_dd']) & \
                     (df[f'STOCHd_{window_k}_{window_d}_3'].shift(1) < df['double_dd'].shift(1)) 
-        long_exit = (df[f'STOCHd_{window_k}_{window_d}_3'] < df['double_d']) | reverse_l
+        long_exit = (df[f'STOCHd_{window_k}_{window_d}_3'] < df['double_d']) #| reverse_l
 
         short_entry = (df[f'STOCHd_{window_k}_{window_d}_3'] < df['double_dd']) & \
                     (df[f'STOCHd_{window_k}_{window_d}_3'].shift(1) > df['double_dd'].shift(1)) 
-        short_exit = (df[f'STOCHd_{window_k}_{window_d}_3'] > df['double_d']) | reverse_s
+        short_exit = (df[f'STOCHd_{window_k}_{window_d}_3'] > df['double_d']) #| reverse_s
         
         if side == 'long':
             short_entry = False

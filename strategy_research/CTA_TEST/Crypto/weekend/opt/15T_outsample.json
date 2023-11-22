@@ -1,5 +1,42 @@
 {
     "params": {
+        "TRX": {
+            "long": {
+                "0": {
+                    "window": 64
+                },
+                "1": {
+                    "window": 72
+                }
+            },
+            "short": {}
+        },
+        "GRT": {
+            "long": {
+                "0": {
+                    "window": 64
+                },
+                "1": {
+                    "window": 68
+                },
+                "2": {
+                    "window": 52
+                },
+                "3": {
+                    "window": 56
+                },
+                "4": {
+                    "window": 28
+                },
+                "5": {
+                    "window": 32
+                },
+                "6": {
+                    "window": 36
+                }
+            },
+            "short": {}
+        },
         "STX": {
             "long": {},
             "short": {

@@ -14,8 +14,7 @@ def get_data(df_dict, coin):
         
 strategy_path = os.path.join(sys.path[0], 'Crypto')
 # strategy_folders = [folder for folder in os.listdir(strategy_path) if os.path.isdir(os.path.join(strategy_path, folder))]
-# strategy_folders = ['bband_squeeze','weekend', 'donchian_ma', 'bband', 'keltner']
-strategy_folders = ['ma_triple']
+strategy_folders = ['bband_squeeze','weekend', 'donchian_ma', 'bband', 'keltner','ma_triple','kd_smoother']
 
 start = '2022-01-01'
 
@@ -56,7 +55,7 @@ for strategy_name in strategy_folders:
                         pf = strategy.strategy(side=direction,params=param)
                         stat = pf.stats()
                         sharpe_ratio = stat['Sharpe Ratio']
-                        if sharpe_ratio > 2:
+                        if sharpe_ratio > 1.8:
                             outsample_result['params'][coin][direction][str(i)] = param  
                             i += 1
                         del df

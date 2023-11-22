@@ -17,7 +17,7 @@ def get_data(df_dict, coin):
 
 strategy_path = os.path.join(sys.path[0], 'Crypto')
 strategy_folders = [folder for folder in os.listdir(strategy_path) if os.path.isdir(os.path.join(strategy_path, folder))]
-with open(f'./tunning_params_dict.json', 'r') as file:
+with open(f'CTA_TEST/Crypto/tunning_params.json', 'r') as file:
     params_dict = json.load(file)
     
 start = '2022-01-01'
@@ -50,13 +50,13 @@ if not os.path.exists("df_dict.pkl"):
             except:
                 pass
 
-    with open('df_dict.pkl', 'wb') as handle:
-        pickle.dump(df_dict, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    # with open('df_dict.pkl', 'wb') as handle:
+    #     pickle.dump(df_dict, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
-with open('df_dict.pkl', 'rb') as handle:
-    df_dict = pickle.load(handle)
+# with open('df_dict.pkl', 'rb') as handle:
+#     df_dict = pickle.load(handle)
 
-for strategy_folder in ['kd_smoother','ma_triple']:
+for strategy_folder in ['keltner']:
     module_name = f'Crypto.{strategy_folder}.{strategy_folder}'
     print(strategy_folder)
     strategy_module = importlib.import_module(module_name)
@@ -91,4 +91,3 @@ for strategy_folder in ['kd_smoother','ma_triple']:
                     gc.collect()
                 except Exception as e:
                     print("An error occurred:", e)
-                    pass
