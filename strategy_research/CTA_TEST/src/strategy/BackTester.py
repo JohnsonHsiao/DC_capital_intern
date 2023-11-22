@@ -184,7 +184,7 @@ class BackTester():
                 pf, p = _strategy(train, side, **p) # type: ignore
                 return pf, p, pf.stats(), pf.value  # type: ignore
 
-            result_list = Parallel(n_jobs=6,prefer=opt_type,verbose=0)(delayed(func)(self._strategy, train, side, p) for p in tqdm(params_list)) # type: ignore
+            result_list = Parallel(n_jobs=4,prefer=opt_type,verbose=0)(delayed(func)(self._strategy, train, side, p) for p in tqdm(params_list)) # type: ignore
             result_list = [[result[0],result[1],result[2],result[3]] for result in result_list] # type: ignore
         else:
             for p in tqdm(params_list):

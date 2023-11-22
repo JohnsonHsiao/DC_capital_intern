@@ -40,9 +40,9 @@ class MultiTester():
         self.df_dict = df_dict
 
     def get_data(self,symbol,use_cache=True):
-        # if symbol in list(self.df_cache.keys()) and use_cache==True:
-        #     return self.df_cache[symbol]
-        df = self.get_data_func(self.df_dict,symbol)
+        if symbol in list(self.df_cache.keys()) and use_cache==True:
+            return self.df_cache[symbol]
+        df = self.get_data_func(symbol)
         if len(self.start)!=0:
             df = df.loc[self.start:]
         if len(self.end)!=0:
@@ -52,7 +52,6 @@ class MultiTester():
 
     def run_optimize_test(self,symbol,side='L/S',sep='',df_use_cache=True):
         self.optimize_cache[symbol] = {}
-
         df = self.get_data(symbol,use_cache=df_use_cache)
         _sep = sep
         if _sep == '':
@@ -100,10 +99,10 @@ class MultiTester():
             trades = pd.concat([long_trades,short_trades]).sort_values('Entry Index')
             period_df = analyze.show_period_analysis(trades,period='Q')
             print(tabulate(period_df, headers='keys', tablefmt='psql')) # type: ignore
-            if not os.path.exists(f"{self.save_path}opt/{freq}/{symbol}"):
-                os.makedirs(f"{self.save_path}opt/{freq}/{symbol}")
-            long_record_df.to_csv(f'{self.save_path}opt/{freq}/{symbol}/long_record_df.csv')
-            short_record_df.to_csv(f'{self.save_path}opt/{freq}/{symbol}/short_record_df.csv')
+            # if not os.path.exists(f"{self.save_path}opt/{freq}/{symbol}"):
+            #     os.makedirs(f"{self.save_path}opt/{freq}/{symbol}")
+            # long_record_df.to_csv(f'{self.save_path}opt/{freq}/{symbol}/long_record_df.csv')
+            # short_record_df.to_csv(f'{self.save_path}opt/{freq}/{symbol}/short_record_df.csv')
         else:
             record_df = strategy.optimize(
                             side=side,
@@ -122,9 +121,9 @@ class MultiTester():
             period_df = analyze.show_period_analysis(trades,period='Q')
             print(tabulate(period_df, headers='keys', tablefmt='psql'))
             freq = self.config['freq']
-            if not os.path.exists(f"{self.save_path}{freq}/{symbol}"):
-                os.makedirs(f"{self.save_path}{freq}/{symbol}")
-            record_df.to_csv(f"{self.save_path}{freq}/{symbol}/{side}_record_df.csv")
+            # if not os.path.exists(f"{self.save_path}{freq}/{symbol}"):
+            #     os.makedirs(f"{self.save_path}{freq}/{symbol}")
+            # record_df.to_csv(f"{self.save_path}{freq}/{symbol}/{side}_record_df.csv")
 
     def run_rolling_test(self,symbol,side='L/S',intervals=[16,4],expanding=True):
         self.rolling_cache[symbol] = {}
