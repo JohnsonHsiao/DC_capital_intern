@@ -1,0 +1,22 @@
+
+    {
+        "config": {
+            "freq": "15min",
+            "fee": 0.0003,
+            "weekend_filter": "False"
+        },
+        "params": {
+            "INJ": {
+                "long": {
+                    "0": {
+                        "window_k": 72.0,
+                        "window_d": 132.0
+                    },
+                    "1": {
+                        "window_k": 236.0,
+                        "window_d": 120.0
+                    }
+                }
+            }
+        }
+    }
