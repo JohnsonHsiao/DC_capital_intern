@@ -56,7 +56,7 @@ if not os.path.exists("df_dict.pkl"):
 with open('df_dict.pkl', 'rb') as handle:
     df_dict = pickle.load(handle)
 
-for strategy_folder in ['kd_smoother']:
+for strategy_folder in ['keltner']:
     module_name = f'Crypto.{strategy_folder}.{strategy_folder}'
     print(strategy_folder)
     strategy_module = importlib.import_module(module_name)
