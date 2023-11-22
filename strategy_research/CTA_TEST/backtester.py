@@ -50,13 +50,13 @@ if not os.path.exists("df_dict.pkl"):
             except:
                 pass
 
-    # with open('df_dict.pkl', 'wb') as handle:
-    #     pickle.dump(df_dict, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    with open('df_dict.pkl', 'wb') as handle:
+        pickle.dump(df_dict, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
-# with open('df_dict.pkl', 'rb') as handle:
-#     df_dict = pickle.load(handle)
+with open('df_dict.pkl', 'rb') as handle:
+    df_dict = pickle.load(handle)
 
-for strategy_folder in ['keltner']:
+for strategy_folder in ['kd_smoother']:
     module_name = f'Crypto.{strategy_folder}.{strategy_folder}'
     print(strategy_folder)
     strategy_module = importlib.import_module(module_name)

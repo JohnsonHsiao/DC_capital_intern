@@ -11,9 +11,8 @@
                   "lchannel":[10,240,15],
                   "ma_window":[10,240,15]},
 
-  "kd_smoother":{"window_k": [12, 240, 15],
-                 "window_d": [12, 240, 15],
-                 "window_ma": [12, 240, 15]},
+  "kd_smoother":{"window_k": [12, 240, 8],
+                 "window_d": [12, 240, 8]},
 
   "keltner":{"window_ma": [12,400,4],
               "multiplier": [2,3,0.5]},

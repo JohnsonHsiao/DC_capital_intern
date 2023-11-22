@@ -60,16 +60,16 @@ class Strategy(BackTester):
         # params
         window_k = int(params['window_k'])
         window_d = int(params['window_d'])
-        window_ma = int(params['window_ma'])
+        # window_ma = int(params['window_ma'])
 
         df.ta.stoch(high='high', low='low', close='close', k=window_k, d=window_d, append=True)
           
         df['double_d'] = df[f'STOCHd_{window_k}_{window_d}_3'].ewm(span=window_d, adjust=False).mean()
         df['double_dd'] = df['double_d'].ewm(span=window_d, adjust=False).mean()
         
-        ma = df['close'].rolling(window=window_ma, min_periods=1, center=False).mean()
-        reverse_l = (df['close'] > ma.shift(1)) & (df['close'] < ma)
-        reverse_s = (df['close'] < ma.shift(1)) & (df['close'] > ma)
+        # ma = df['close'].rolling(window=window_ma, min_periods=1, center=False).mean()
+        # reverse_l = (df['close'] > ma.shift(1)) & (df['close'] < ma)
+        # reverse_s = (df['close'] < ma.shift(1)) & (df['close'] > ma)
 
         long_entry = (df[f'STOCHd_{window_k}_{window_d}_3'] > df['double_dd']) & \
                     (df[f'STOCHd_{window_k}_{window_d}_3'].shift(1) < df['double_dd'].shift(1)) 
