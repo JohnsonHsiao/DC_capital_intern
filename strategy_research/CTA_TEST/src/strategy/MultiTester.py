@@ -117,13 +117,13 @@ class MultiTester():
             pf = strategy.strategy(side = side, params=record_df.iloc[0]['params'])
             trades = pf.trades.records_readable
             self.optimize_cache[symbol][side] = record_df
-            # analyze.show_pf_analysis(record_df['params'].iloc[0], side, symbol, axv_index=[_sep])
+            analyze.show_pf_analysis(record_df['params'].iloc[0], side, symbol, axv_index=[_sep])
             period_df = analyze.show_period_analysis(trades,period='Q')
             print(tabulate(period_df, headers='keys', tablefmt='psql'))
             freq = self.config['freq']
-            # if not os.path.exists(f"{self.save_path}{freq}/{symbol}"):
-            #     os.makedirs(f"{self.save_path}{freq}/{symbol}")
-            # record_df.to_csv(f"{self.save_path}{freq}/{symbol}/{side}_record_df.csv")
+            if not os.path.exists(f"{self.save_path}{freq}/{symbol}"):
+                os.makedirs(f"{self.save_path}{freq}/{symbol}")
+            record_df.to_csv(f"{self.save_path}{freq}/{symbol}/{side}_record_df.csv")
 
     def run_rolling_test(self,symbol,side='L/S',intervals=[16,4],expanding=True):
         self.rolling_cache[symbol] = {}
