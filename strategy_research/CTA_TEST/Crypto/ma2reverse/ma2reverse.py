@@ -53,6 +53,7 @@ class Strategy(BackTester):
     def _strategy(self, df, side='both', **params):
         long_ma = int(params['long_ma'])
         short_ma = int(params['short_ma'])
+        sl = int(params['sl'])
         
         if short_ma > long_ma:
             short_ma = 12
@@ -93,7 +94,7 @@ class Strategy(BackTester):
                                         exits=long_exit,
                                         short_entries=short_entry,
                                         short_exits=short_exit,
-                                        sl_stop= 0.05,
+                                        sl_stop= sl/100,
                                         upon_opposite_entry='reverse'
                                         )
         return pf, params
