@@ -42,7 +42,8 @@ class MultiTester():
     def get_data(self,symbol,use_cache=True):
         if symbol in list(self.df_cache.keys()) and use_cache==True:
             return self.df_cache[symbol]
-        df = self.get_data_func(symbol)
+        # df = self.get_data_func(symbol)
+        df = self.df_dict[symbol]
         if len(self.start)!=0:
             df = df.loc[self.start:]
         if len(self.end)!=0:
