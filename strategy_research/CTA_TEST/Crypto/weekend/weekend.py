@@ -53,11 +53,11 @@ class Strategy(BackTester):
         
         # params
         window = int(params['window'])
-        K = 2
+        K = int(params['hour'])
         
         df['weekday'] = df.index.weekday+1
         df['hour'] = df.index.hour
-        weekend = ((df['weekday'] == 5) & (df['hour'] >= 24-K)) | (df['weekday'] == 6) | ((df['weekday'] == 7) & (df['hour'] < 24-K))
+        weekend = ((df['weekday'] == K) & (df['hour'] >= 24-K)) | (df['weekday'] == 6) | ((df['weekday'] == 7) & (df['hour'] < 24-K))
         
         donchian_high = df['high'].rolling(window).max().shift()
         donchian_low = df['low'].rolling(window).min().shift()

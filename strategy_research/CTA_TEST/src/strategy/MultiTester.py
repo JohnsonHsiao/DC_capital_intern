@@ -61,8 +61,8 @@ class MultiTester():
         analyze = Analyzer(strategy)
         if side == 'L/S':
             freq = self.config['freq']
-            if not os.path.exists(f"{self.save_path}opt/{freq}/{symbol}"):
-                os.makedirs(f"{self.save_path}opt/{freq}/{symbol}")
+            if not os.path.exists(f"{self.save_path}{freq}/{symbol}"):
+                os.makedirs(f"{self.save_path}{freq}/{symbol}")
             print(f'\n---------- {symbol} Long ----------')
             long_record_df = strategy.optimize(
                                         side='long',
@@ -93,16 +93,16 @@ class MultiTester():
             long_pf = strategy.strategy(side = 'long', params=long_record_df.iloc[0]['params'])
             short_pf = strategy.strategy(side = 'short', params=short_record_df.iloc[0]['params'])
             value = (long_pf.value + short_pf.value - 2* long_pf.init_cash) * 100 / long_pf.init_cash
-            # analyze.show_value_analyze(value,f'{symbol} L/S',axv_index=[_sep])
+            analyze.show_value_analyze(value,f'{symbol} L/S',axv_index=[_sep])
             long_trades = long_pf.trades.records_readable 
             short_trades = short_pf.trades.records_readable
             trades = pd.concat([long_trades,short_trades]).sort_values('Entry Index')
             period_df = analyze.show_period_analysis(trades,period='Q')
             print(tabulate(period_df, headers='keys', tablefmt='psql')) # type: ignore
-            # if not os.path.exists(f"{self.save_path}opt/{freq}/{symbol}"):
-            #     os.makedirs(f"{self.save_path}opt/{freq}/{symbol}")
-            # long_record_df.to_csv(f'{self.save_path}opt/{freq}/{symbol}/long_record_df.csv')
-            # short_record_df.to_csv(f'{self.save_path}opt/{freq}/{symbol}/short_record_df.csv')
+            if not os.path.exists(f"{self.save_path}{freq}/{symbol}"):
+                os.makedirs(f"{self.save_path}{freq}/{symbol}")
+            long_record_df.to_csv(f'{self.save_path}{freq}/{symbol}/long_record_df.csv')
+            short_record_df.to_csv(f'{self.save_path}{freq}/{symbol}/short_record_df.csv')
         else:
             record_df = strategy.optimize(
                             side=side,

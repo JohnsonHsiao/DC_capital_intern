@@ -25,7 +25,7 @@ import json
 
 def get_data(coin):
     pair = f'{coin}USDT'
-    df = pd.read_hdf(f'/Users/johnsonhsiao/Desktop/data/{pair}_PERPETUAL.h5')
+    df = pd.read_hdf(f'/Volumes/crypto_data/price_data/binance/1m/{pair}_PERPETUAL.h5')
     return df
 
 class Strategy(BackTester):
@@ -52,20 +52,22 @@ class Strategy(BackTester):
         window_k = int(params['window_k'])
         window_d = int(params['window_d'])
 
-        df.ta.stoch(high='high', low='low', close='close', k=window_k, d=window_d, append=True)
-          
-        df['double_d'] = df[f'STOCHd_{window_k}_{window_d}_3'].ewm(span=window_d, adjust=False).mean()
+        low_min = df['low'].rolling(window=window_k).min()
+        high_max = df['high'].rolling(window=window_k).max()
+        df['%K'] = ((df['close'] - low_min) / (high_max - low_min)) * 100
+
+        # 計算 %D
+        df['%D'] = df['%K'].rolling(window=window_d).mean()
+
+        # 計算雙重平滑的 %D
+        df['double_d'] = df['%D'].ewm(span=window_d, adjust=False).mean()
         df['double_dd'] = df['double_d'].ewm(span=window_d, adjust=False).mean()
 
-        long_entry = (df[f'STOCHd_{window_k}_{window_d}_3'] > df['double_dd']) & \
-                    (df[f'STOCHd_{window_k}_{window_d}_3'].shift(1) < df['double_dd'].shift(1)) 
-        long_exit = (df[f'STOCHd_{window_k}_{window_d}_3'] < df['double_d']) & \
-                    (df[f'STOCHd_{window_k}_{window_d}_3'].shift(1) > df['double_d'].shift(1))
-
-        short_entry = (df[f'STOCHd_{window_k}_{window_d}_3'] < df['double_dd']) & \
-                    (df[f'STOCHd_{window_k}_{window_d}_3'].shift(1) > df['double_dd'].shift(1)) 
-        short_exit = (df[f'STOCHd_{window_k}_{window_d}_3'] > df['double_d']) & \
-                    (df[f'STOCHd_{window_k}_{window_d}_3'].shift(1) < df['double_d'].shift(1))
+        # 定義進場和出場訊號
+        long_entry = (df['%D'] > df['double_dd']) & (df['%D'].shift(1) < df['double_dd'].shift(1))
+        long_exit = (df['%D'] < df['double_d']) & (df['%D'].shift(1) > df['double_d'].shift(1))
+        short_entry = (df['%D'] < df['double_dd']) & (df['%D'].shift(1) > df['double_dd'].shift(1))
+        short_exit = (df['%D'] > df['double_d']) & (df['%D'].shift(1) < df['double_d'].shift(1))
 
 
         if side == 'long':

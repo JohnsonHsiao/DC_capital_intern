@@ -142,9 +142,9 @@ class Analyzer():
         print(f'PF * Win Rate: {wrpf:.3f}')
         value_series = (pf.value/start_value)*100
         value_series = value_series - 100
-        MDD = self.plot_return_mdd(value_series.ffill(), tag=tag, axv_index=axv_index, \
+        self.plot_return_mdd(value_series.ffill(), tag=tag, axv_index=axv_index, \
                                    txt=f'APY: {apy:.2f} %\nMDD: {mdd:.2f} %\nSharpe Ratio: {sharpe:.2f}\nWin Rate: {win_rate:.2f} %\nTotal Trades: {total_trades:.2f}\nPF: {profit_f:.2f}')
-        return MDD, stat
+        return value_series
 
     # trades analysis, df
     def plot_signal_response(self,trades):
