@@ -94,7 +94,7 @@ class MultiTester():
             long_pf = strategy.strategy(side = 'long', params=long_record_df.iloc[0]['params'])
             short_pf = strategy.strategy(side = 'short', params=short_record_df.iloc[0]['params'])
             value = (long_pf.value + short_pf.value - 2* long_pf.init_cash) * 100 / long_pf.init_cash
-            analyze.show_value_analyze(value,f'{symbol} L/S',axv_index=[_sep])
+            # analyze.show_value_analyze(value,f'{symbol} L/S',axv_index=[_sep])
             long_trades = long_pf.trades.records_readable 
             short_trades = short_pf.trades.records_readable
             trades = pd.concat([long_trades,short_trades]).sort_values('Entry Index')
