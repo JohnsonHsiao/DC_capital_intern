@@ -8,35 +8,34 @@
     "params": {
         "ETH": {
             "both": {
-                "0": {"long_ma": 40, 
-                      "short_ma": 52,
-                      "hour": 2, 
-                      "sl": 4
+                "0": {
+                    "long_ma": 40, 
+                    "short_ma": 52,
+                    "hour": 2, 
+                    "sl": 4
                 },
-                "1":{"long_ma": 24,
+                "1": {
+                    "long_ma": 24,
                      "short_ma": 64,
                      "hour": 2, 
                      "sl": 4
                 }
             }
         },
-        "SOL":{
+        "BTC":{
             "both":{
                 "0":{
-                    "window_k": 120, 
-                    "window_d": 96
-                },
-                "1":{
-                    "window_k": 140, 
-                    "window_d": 72
+                    "long_ma": 88,
+                    "short_ma": 32,
+                    "hour": 2, 
+                    "sl": 4
                 }
             }
         },
-        "MATIC":{
+        "BNB":{
             "both":{
                 "0":{
-                    "window_k": 32, 
-                    "window_d": 88
+                    
                     }
             },
             "long":{
