@@ -48,82 +48,188 @@
                 }
             }
         },
-        "XRP":{
+        "ALGO":{
             "both":{
                 "0":{
-                    "window_k": 88, 
-                    "window_d": 76
-                    }
-            },
-            "long":{
-                "0":{
-                    "window_k": 88, 
-                    "window_d": 76
-                }
-            },
-            "short":{
-                "0":{
-                    "window_k": 92, 
-                    "window_d": 84
+                    "long_ma": 112,
+                    "short_ma": 100,
+                    "hour": 2, 
+                    "sl": 5
+                },
+                "1":{
+                    "long_ma": 112,
+                    "short_ma": 96,
+                    "hour": 2, 
+                    "sl": 5
                 }
             }
         },
-        "RUNE":{
-            "long":{
-                "0":{
-                    "window_k": 44, 
-                    "window_d": 4
-                }
-            },
+        "APT":{
             "both":{
                 "0":{
-                    "window_k": 44, 
-                    "window_d": 4
+                    "long_ma": 136,
+                    "short_ma": 48,
+                    "hour": 2, 
+                    "sl": 4
+                },
+                "1":{
+                    "long_ma": 104,
+                    "short_ma": 84,
+                    "hour": 2, 
+                    "sl": 4
                 }
             }
         },
-        "INJ":{
-            "long":{
-                "0":{
-                    "window_k": 164, 
-                    "window_d": 68
-                }
-            },
+        "ARB":{
             "both":{
                 "0":{
-                    "window_k": 20, 
-                    "window_d": 128
-                }
+                    "long_ma": 60,
+                    "short_ma": 36,
+                    "hour": 2, 
+                    "sl": 5
+                }   
             }
         },
         "ATOM":{
-            "short":{
+            "both":{
                 "0":{
-                    "window_k": 4, 
-                    "window_d": 84
+                    "long_ma": 56,
+                    "short_ma": 64,
+                    "hour": 2, 
+                    "sl": 5
+                }   
+            }
+        },
+        "AVAX":{
+            "both":{
+                "0":{
+                    "long_ma": 44,
+                    "short_ma": 96,
+                    "hour": 2, 
+                    "sl": 5
+                },
+                "1":{
+                    "long_ma": 116,
+                    "short_ma": 80,
+                    "hour": 2, 
+                    "sl": 4
+                },
+                "2":{
+                    "long_ma": 28,
+                    "short_ma": 96,
+                    "hour": 2, 
+                    "sl": 5
+                },
+                "3":{
+                    "long_ma": 52,
+                    "short_ma": 92,
+                    "hour": 2, 
+                    "sl": 4
                 }
+
+
             }
         },
         "ETC":{
-            "short":{
-                "0":{
-                    "window_k": 44, 
-                    "window_d": 84
-                }
-            },
             "both":{
                 "0":{
-                    "window_k": 28, 
-                    "window_d": 84
+                    "long_ma": 60,
+                    "short_ma": 32,
+                    "hour": 2, 
+                    "sl": 5
                 }
             }
         },
-        "GMT":{
+        "FIL":{
             "both":{
                 "0":{
-                    "window_k": 128, 
-                    "window_d": 40
+                    "long_ma": 128,
+                    "short_ma": 88,
+                    "hour": 2, 
+                    "sl": 5
+                },
+                "1":{
+                    "long_ma": 132,
+                    "short_ma": 84,
+                    "hour": 2, 
+                    "sl": 5
+                },
+                "2":{
+                    "long_ma": 136,
+                    "short_ma": 80,
+                    "hour": 2, 
+                    "sl": 5
                 }
+            }
+        },
+        "GALA":{
+            "both":{
+                "0":{
+                    "long_ma": 128,
+                    "short_ma": 88,
+                    "hour": 2, 
+                    "sl": 5
+                }
+            }
+        },
+        "LINK":{
+            "both":{
+                "0":{
+                    "long_ma": 112,
+                    "short_ma": 72,
+                    "hour": 2, 
+                    "sl": 5
+                },
+                "1":{
+                    "long_ma": 100,
+                    "short_ma": 72,
+                    "hour": 2, 
+                    "sl": 4
+                }
+            }
+        },
+        "OMG":{
+            "both":{
+                "0":{
+                    "long_ma": 108,
+                    "short_ma": 76,
+                    "hour": 2, 
+                    "sl": 5
+                },
+                "1":{
+                    "long_ma": 124,
+                    "short_ma": 80,
+                    "hour": 2, 
+                    "sl": 5
+                },
+                "2":{
+                    "long_ma": 112,
+                    "short_ma": 80,
+                    "hour": 2, 
+                    "sl": 5
+                }
+            }
+        },
+        "OP":{
+            "both":{
+                "0":{
+                    "long_ma": 128,
+                    "short_ma": 76,
+                    "hour": 2, 
+                    "sl": 5
+                },
+                "1":{
+                    "long_ma": 132,
+                    "short_ma": 72,
+                    "hour": 2, 
+                    "sl": 5
+                },
+                "2":{
+                    "long_ma": 120,
+                    "short_ma": 76,
+                    "hour": 2, 
+                    "sl": 5
+                },
             }
         }
     }
