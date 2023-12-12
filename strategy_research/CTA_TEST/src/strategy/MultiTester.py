@@ -74,7 +74,7 @@ class MultiTester():
                                         end=sep
                                         )
             print(long_record_df['params'].iloc[0])
-            # analyze.show_pf_analysis(long_record_df['params'].iloc[0], 'long', symbol, axv_index=[_sep])
+            analyze.show_pf_analysis(long_record_df['params'].iloc[0], 'long', symbol, axv_index=[_sep])
             self.optimize_cache[symbol]['long'] = long_record_df
             
             print(f'\n---------- {symbol} Short ----------')
@@ -87,14 +87,14 @@ class MultiTester():
                                         end=sep
                                         )
             print(short_record_df['params'].iloc[0])
-            # analyze.show_pf_analysis(short_record_df['params'].iloc[0], 'short', symbol, axv_index=[_sep])
+            analyze.show_pf_analysis(short_record_df['params'].iloc[0], 'short', symbol, axv_index=[_sep])
             self.optimize_cache[symbol]['short'] = short_record_df
 
             print(f'-------- {symbol} L/S --------')
             long_pf = strategy.strategy(side = 'long', params=long_record_df.iloc[0]['params'])
             short_pf = strategy.strategy(side = 'short', params=short_record_df.iloc[0]['params'])
             value = (long_pf.value + short_pf.value - 2* long_pf.init_cash) * 100 / long_pf.init_cash
-            # analyze.show_value_analyze(value,f'{symbol} L/S',axv_index=[_sep])
+            analyze.show_value_analyze(value,f'{symbol} L/S',axv_index=[_sep])
             long_trades = long_pf.trades.records_readable 
             short_trades = short_pf.trades.records_readable
             trades = pd.concat([long_trades,short_trades]).sort_values('Entry Index')
