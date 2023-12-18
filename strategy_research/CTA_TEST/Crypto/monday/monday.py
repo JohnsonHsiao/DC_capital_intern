@@ -55,7 +55,7 @@ class Strategy(BackTester):
         ret_threshold = params['ret_threshold'] / 1000
         window = int(params['window'])
         
-        
+        ma = df['close'].rolling(window).mean()
         
         df['weekday'] = df.index.weekday+1
         df['hour'] = df.index.hour
@@ -83,11 +83,13 @@ class Strategy(BackTester):
                 except:
                     pass
                 
-        long_entry = (df['weekend_vol'] > vol_threshold) & (df['weekend_ret'] > ret_threshold)
-        long_exit = df['weekday'] == 6
+        long_entry = (df['weekend_vol'] > vol_threshold) & (df['weekend_ret'] > ret_threshold) #& \
+                    #  (df['close'] > ma)
+        long_exit = (df['weekday'] == 5) & (df['hour'] == 20)
 
-        short_entry = (df['weekend_vol'] > vol_threshold) & (df['weekend_ret'] < -ret_threshold)
-        short_exit = df['weekday'] == 6
+        short_entry = (df['weekend_vol'] > vol_threshold) & (df['weekend_ret'] < -ret_threshold) #& \
+                    #   (df['close'] < ma)
+        short_exit = (df['weekday'] == 5) & (df['hour'] == 20)
 
         if side == 'long':
             short_entry = False
