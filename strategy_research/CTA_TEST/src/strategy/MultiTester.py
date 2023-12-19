@@ -139,7 +139,7 @@ class MultiTester():
                                                     intervals=intervals,
                                                     expanding = expanding,
                                                     opt_type='processes',
-                                                    target='Calmar Ratio',
+                                                    target='Sharpe Ratio',
                                                     direction='max',
                                                         )
             long_rolling_df['side'] = 'Long'
