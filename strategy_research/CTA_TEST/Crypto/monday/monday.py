@@ -26,7 +26,7 @@ import json
 def get_data(coin):
     pair = f'{coin}USDT'
     try:
-        df = pd.read_hdf(f'Y:\\price_data\\binance\\1m\\{pair}_PERPETUAL.h5')
+        df = pd.read_hdf(f'C:\\Users\\Intern\\Desktop\\{pair}_PERPETUAL.h5')
     except:
         df = pd.read_hdf(f'/Users/johnsonhsiao/Desktop/{pair}_PERPETUAL.h5')
     return df
@@ -51,11 +51,10 @@ class Strategy(BackTester):
     
     def _strategy(self, df, side='both', **params):    
         # params
-        vol_threshold = params['vol_threshold'] / 1000
-        ret_threshold = params['ret_threshold'] / 1000
-        window = int(params['window'])
-        
-        ma = df['close'].rolling(window).mean()
+        vol_threshold = params['vol_threshold'] / 100
+        ret_threshold = params['ret_threshold'] / 100
+        # window = int(params['window'])
+        # ma = df['close'].rolling(window).mean()
         
         df['weekday'] = df.index.weekday+1
         df['hour'] = df.index.hour
@@ -63,13 +62,19 @@ class Strategy(BackTester):
         
         df['weekend_vol'] = 0
         ret = 0
+        i = 0
         for idx, row in df.iterrows():
             if row['weekday'] == (6 or 7):
+                i += 1
                 ret += abs(row['return'])
-            else:
-                df['weekend_vol'].loc[idx] = ret
-                if row['weekday'] == 5 and row['hour'] == 23:
-                    ret = 0
+            elif row['weekday'] != (6 or 7):
+                try:
+                    df['weekend_vol'].loc[idx] = ret / i
+                    if row['weekday'] == 1:
+                        ret = 0
+                        i = 0
+                except:
+                    pass
                     
         df['weekend_ret'] = 0
         for idx, row in df.iterrows():
@@ -83,13 +88,11 @@ class Strategy(BackTester):
                 except:
                     pass
                 
-        long_entry = (df['weekend_vol'] > vol_threshold) & (df['weekend_ret'] > ret_threshold) #& \
-                    #  (df['close'] > ma)
-        long_exit = (df['weekday'] == 5) & (df['hour'] == 20)
+        long_entry = (df['weekend_vol'] > vol_threshold) & (df['weekend_ret'] > ret_threshold) 
+        long_exit = (df['weekday'] == 2) & (df['hour'] == 0)
 
-        short_entry = (df['weekend_vol'] > vol_threshold) & (df['weekend_ret'] < -ret_threshold) #& \
-                    #   (df['close'] < ma)
-        short_exit = (df['weekday'] == 5) & (df['hour'] == 20)
+        short_entry = (df['weekend_vol'] > vol_threshold) & (df['weekend_ret'] < -ret_threshold)
+        short_exit = (df['weekday'] == 2) & (df['hour'] == 0)
 
         if side == 'long':
             short_entry = False

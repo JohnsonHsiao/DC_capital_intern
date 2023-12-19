@@ -2,9 +2,7 @@ def _strategy(self, df, side='both', **params):
     # params
     vol_threshold = params['vol_threshold'] / 100
     ret_threshold = params['ret_threshold'] / 100
-    # sl = params['sl']
     # window = int(params['window'])
-    
     # ma = df['close'].rolling(window).mean()
     
     df['weekday'] = df.index.weekday+1
