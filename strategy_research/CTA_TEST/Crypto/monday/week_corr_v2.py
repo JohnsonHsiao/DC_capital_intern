@@ -51,17 +51,16 @@ class Strategy(BackTester):
     
     def _strategy(self, df, side='both', **params):    
         # params
-        vol_threshold = params['vol_threshold'] / 100 /48
-        ret_threshold = params['ret_threshold'] / 100 
-        mutiplier = params['mutiplier']
-        stop_loss = params['stop_loss']
-        # window = int(params['window'])
-        # ma = df['close'].rolling(window).mean()
+        vol_ma = params['vol_ma']
+        ret_ma = params['ret_ma']
+        quantile = params['quantile']
+        # stop_loss = params['stop_loss']
         
         df['weekday'] = df.index.weekday+1
         df['hour'] = df.index.hour
         df['return'] = df['close'] / df['open'] - 1
         
+        # 假日波動
         df['weekend_vol'] = 0
         ret = 0
         i = 0
@@ -71,32 +70,35 @@ class Strategy(BackTester):
                 ret += abs(row['return'])
             elif row['weekday'] != (6 or 7):
                 try:
-                    if row['weekday'] == 1 and row['hour'] == 1:
-                        df['weekend_vol'].loc[idx] = ret / i
+                    df['weekend_vol'].loc[idx] = ret / i
+                    if row['weekday'] == 1 and row['hour'] == 0:
                         ret = 0
                         i = 0
                 except:
                     pass
-                
+        
+        # 假日return
         df['weekend_ret'] = 0
         for idx, row in df.iterrows():
             if (row['weekday'] == 6) and (row['hour'] == 0):
                 o = row['open']
-            elif (row['weekday'] == 7) and (row['hour'] == 23):
+            if (row['weekday'] == 7) and (row['hour'] == 23):
                 c = row['close']
             elif row['weekday'] != (6 or 7):
                 try:
                     df['weekend_ret'].loc[idx] = c / o - 1
                 except:
                     pass
+        
+        # 若假日的波動度大於vol_threshold 且 假日的return大於ret_threshold
+        long_entry = (df['weekend_vol'] > df['weekend_vol'].shift(1).rolling(48*vol_ma).mean())\
+                    & (df['weekend_ret'] > df['weekend_vol'].shift(1).rolling(48*ret_ma).quantile(quantile))
+        long_exit = (df['weekday'] == 1) & (df['hour'] == 22)
 
-        # 若假日的波動度大於vol_threshold 且 假日的return介於ret_threshold 和 mutiplier倍的ret_threshold
-        long_entry = (df['weekend_vol'] > vol_threshold) & (mutiplier*ret_threshold > df['weekend_ret']) & (df['weekend_ret'] > ret_threshold) 
-        long_exit = (df['weekday'] == 5) & (df['hour'] == 22)
-        
-        short_entry = (df['weekend_vol'] > vol_threshold) & (-mutiplier*ret_threshold < df['weekend_ret']) & (df['weekend_ret'] < -ret_threshold) 
-        short_exit = (df['weekday'] == 5) & (df['hour'] == 22)
-        
+        short_entry = (df['weekend_vol'] > df['weekend_vol'].shift(1).rolling(48*vol_ma).mean())\
+                    & (df['weekend_ret'] < df['weekend_vol'].shift(1).rolling(48*ret_ma).quantile(1-quantile))
+        short_exit = (df['weekday'] == 1) & (df['hour'] == 22)
+
         if side == 'long':
             short_entry = False
             short_exit = False
@@ -114,7 +116,7 @@ class Strategy(BackTester):
                                         exits=long_exit,
                                         short_entries=short_entry,
                                         short_exits=short_exit,
-                                        sl_stop= stop_loss/100,
+                                        sl_stop= np.nan/100,
                                         upon_opposite_entry='reverse'
                                         )
         return pf, params
