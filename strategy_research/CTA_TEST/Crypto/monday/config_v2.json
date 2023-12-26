@@ -1,0 +1,27 @@
+{
+    "config": {
+        "freq": "1h",
+        "fee": 0.0003,
+        "weekend_filter": "False"
+    },
+    "params": {
+        "BTC": {
+            "long": {
+                "0": {
+                    "vol_threshold": 2.5, 
+                    "ret_threshold": 0.4, 
+                    "stop_loss": 8, 
+                    "mutiplier": 3
+                    }
+                },
+            "both": {
+                "0": {
+                    "vol_threshold": 2.5, 
+                    "ret_threshold": 0.35, 
+                    "stop_loss": 10, 
+                    "mutiplier": 4
+                }
+            }
+        }
+    }
+}
