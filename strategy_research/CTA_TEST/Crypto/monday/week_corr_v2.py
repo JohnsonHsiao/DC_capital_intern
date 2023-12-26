@@ -71,8 +71,8 @@ class Strategy(BackTester):
                 ret += abs(row['return'])
             elif row['weekday'] != (6 or 7):
                 try:
-                    df['weekend_vol'].loc[idx] = ret / i
                     if row['weekday'] == 1 and row['hour'] == 1:
+                        df['weekend_vol'].loc[idx] = ret / i
                         ret = 0
                         i = 0
                 except:
@@ -89,7 +89,8 @@ class Strategy(BackTester):
                     df['weekend_ret'].loc[idx] = c / o - 1
                 except:
                     pass
-                
+
+        # 若假日的波動度大於vol_threshold 且 假日的return介於ret_threshold 和 mutiplier倍的ret_threshold
         long_entry = (df['weekend_vol'] > vol_threshold) & (mutiplier*ret_threshold > df['weekend_ret']) & (df['weekend_ret'] > ret_threshold) 
         long_exit = (df['weekday'] == 5) & (df['hour'] == 22)
         
