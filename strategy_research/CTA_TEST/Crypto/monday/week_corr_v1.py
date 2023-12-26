@@ -54,6 +54,7 @@ class Strategy(BackTester):
         vol_threshold = params['vol_threshold'] / 100 / 48
         ret_threshold = params['ret_threshold'] / 100
         stop_loss = params['stop_loss']
+        date = int(params['date'])
         
         df['weekday'] = df.index.weekday+1
         df['hour'] = df.index.hour
@@ -91,10 +92,10 @@ class Strategy(BackTester):
         
         # 若假日的波動度大於vol_threshold 且 假日的return大於ret_threshold
         long_entry = (df['weekend_vol'] > vol_threshold) & (df['weekend_ret'] > ret_threshold)
-        long_exit = (df['weekday'] == 1) & (df['hour'] == 22)
+        long_exit = (df['weekday'] == date) & (df['hour'] == 22)
 
         short_entry = (df['weekend_vol'] > vol_threshold) & (df['weekend_ret'] < -ret_threshold)   
-        short_exit = (df['weekday'] == 1) & (df['hour'] == 22)
+        short_exit = (df['weekday'] == date) & (df['hour'] == 22)
 
         if side == 'long':
             short_entry = False
