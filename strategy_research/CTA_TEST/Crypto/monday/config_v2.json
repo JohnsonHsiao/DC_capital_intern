@@ -8,14 +8,16 @@
         "BTC": {
             "both": {
                 "0": {
-                    "vol_threshold": 2.5, 
-                    "ret_threshold": 0.15, 
+                    "vol_ma": 7, 
+                    "ret_ma": 7, 
+                    "quantile":0.9,
                     "date":1
                 },
                 "1":{
-                    "vol_threshold": 2.5, 
-                    "ret_threshold": 0.15, 
-                    "date": 5
+                    "vol_ma": 4, 
+                    "ret_ma": 4, 
+                    "quantile": 0.75,
+                    "date":5
                 }
             }
         }

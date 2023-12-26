@@ -53,7 +53,7 @@ class Strategy(BackTester):
         # params
         vol_threshold = params['vol_threshold'] / 100 / 48
         ret_threshold = params['ret_threshold'] / 100
-        stop_loss = params['stop_loss']
+        # stop_loss = params['stop_loss']
         date = int(params['date'])
         
         df['weekday'] = df.index.weekday+1
@@ -114,7 +114,7 @@ class Strategy(BackTester):
                                         exits=long_exit,
                                         short_entries=short_entry,
                                         short_exits=short_exit,
-                                        sl_stop= stop_loss/100,
+                                        sl_stop= np.nan/100,
                                         upon_opposite_entry='reverse'
                                         )
         return pf, params
