@@ -1,7 +1,14 @@
-# DC_capital_intern
-Title
-===
+# DC_capital_intern project
 
+## Introduction
+This project focuses on the research and development of various technical analysis strategies for pop trading. It includes a set of python files and JSON configuration files that allow users to explore, analyze, and fine-tune popular trading indicators such as Bollinger Bands, Donchian Channels, Keltner Channels, and more.
+
+The core of the project is the ability to test and optimize strategy parameters quickly, enabling the creation of adaptive and potentially profitable trading strategies. These strategies can be used in backtesting or integrated into automated trading systems.
+
+# My key contribution
+1. speed up the whole process of multi-asset backtesting within muti-thread and then export the output in hiplot visual work to help the trader optimize the parameter.
+   ![image](https://github.com/user-attachments/assets/732c17ea-9f90-446b-a3e4-9bb9b83d24e7)
+2. Develop the data pipeline from storing data to NAS to output the trading result to the monitor.
 ## Install & Dependence
 - python > 3.9
 - numpy
